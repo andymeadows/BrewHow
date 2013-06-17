@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -9,14 +8,15 @@ namespace BrewHow.Controllers
 {
     public class RecipeController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(int page = 0)
         {
-            List<Recipe> recipes = null;
+            PagedResult<Recipe> recipes = null;
 
             using (var context = new BrewHowContext())
             {
-                recipes = (from recipe in context.Recipes
-                           select recipe).ToList();
+                recipes = new PagedResult<Recipe>(
+                    context.Recipes.OrderBy(r => r.Name),
+                    page);
             }
 
             return View(recipes);

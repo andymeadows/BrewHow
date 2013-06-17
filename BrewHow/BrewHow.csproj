@@ -180,6 +180,8 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\BrewHowContext.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\IPagedResult.cs" />
+    <Compile Include="Models\PagedResult.cs" />
     <Compile Include="Models\Recipe.cs" />
     <Compile Include="Models\Review.cs" />
     <Compile Include="Models\Style.cs" />
@@ -298,6 +300,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Recipe\Index.cshtml" />
+    <Content Include="Views\Shared\PagingPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
