@@ -13,9 +13,9 @@ namespace BrewHow.Migrations
 
         protected override void Seed(BrewHow.Models.BrewHowContext context)
         {
-            var brownAle = new Style { Name = "Brown Ale", Category = Models.Category.Ale };
-            var milkStout = new Style { Name = "Sweet/Milk Stout", Category = Models.Category.Ale };
-            var heffeweisen = new Style { Name = "Heffeweisen", Category = Models.Category.Ale };
+            var brownAle = new Style { Name = "Brown Ale", Category = Category.Ale };
+            var milkStout = new Style { Name = "Sweet/Milk Stout", Category = Category.Ale };
+            var heffeweisen = new Style { Name = "Heffeweisen", Category = Category.Ale };
 
             context.Styles.AddOrUpdate(
                 style => style.Name,

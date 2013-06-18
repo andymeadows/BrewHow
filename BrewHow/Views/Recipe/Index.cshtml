@@ -1,4 +1,4 @@
-﻿@model BrewHow.Models.PagedResult<BrewHow.Models.Recipe>
+﻿@model BrewHow.ViewModels.ITypedPagedResult<BrewHow.ViewModels.RecipeDisplayViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -6,6 +6,9 @@
 
 <h2>Index</h2>
 
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
 <table>
     <tr>
         <th>
@@ -25,7 +28,7 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Name)
+            @Html.ActionLink(item.Name, "Details", new { id=item.RecipeId })
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Style)

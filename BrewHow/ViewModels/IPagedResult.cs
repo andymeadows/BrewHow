@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace BrewHow.Models
+namespace BrewHow.ViewModels
 {
     public interface IPagedResult
     {
