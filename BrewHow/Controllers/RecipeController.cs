@@ -16,10 +16,16 @@ namespace BrewHow.Controllers
         // Create references to the repositories used 
         // to retrieve and persist entities used by 
         // the recipe controller.
-        private RecipeRepository _recipeRepository 
-            = new RecipeRepository();
-        private StyleRepository _styleRepository 
-            = new StyleRepository();
+        private IRecipeRepository _recipeRepository;
+        private IStyleRepository _styleRepository;
+
+        public RecipeController(IRecipeRepository recipeRepository,
+            IStyleRepository styleRepository)
+            : base()
+        {
+            this._recipeRepository = recipeRepository;
+            this._styleRepository = styleRepository;
+        }
 
         // Respond to requests to ~/ with the list of
         // recipes in the system.
@@ -207,18 +213,18 @@ namespace BrewHow.Controllers
         /// and are being maintained as a reference.
         /// </summary>
         /// <param name="disposing"></param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                this._recipeRepository.Dispose();
-                this._recipeRepository = null;
+        //protected override void Dispose(bool disposing)
+        //{
+        //    if (disposing)
+        //    {
+        //        this._recipeRepository.Dispose();
+        //        this._recipeRepository = null;
 
-                this._styleRepository.Dispose();
-                this._styleRepository = null;
-            }
+        //        this._styleRepository.Dispose();
+        //        this._styleRepository = null;
+        //    }
 
-            base.Dispose(disposing);
-        }
+        //    base.Dispose(disposing);
+        //}
     }
 }

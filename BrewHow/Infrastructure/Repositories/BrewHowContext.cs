@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Data.Entity;
 
-namespace BrewHow.Models
+using BrewHow.Models;
+
+namespace BrewHow.Infrastructure.Repositories
 {
-    public class BrewHowContext : DbContext
+    public class BrewHowContext : DbContext, IBrewHowContext
     {
-        public DbSet<Recipe> Recipes { get; set; }
-        public DbSet<Review> Reviews { get; set; }
-        public DbSet<Style> Styles { get; set; }
+        public IDbSet<Recipe> Recipes { get; set; }
+        public IDbSet<Review> Reviews { get; set; }
+        public IDbSet<Style> Styles { get; set; }
+
+        public BrewHowContext()
+            : base("BrewHow.Models.BrewHowContext")
+        {
+        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

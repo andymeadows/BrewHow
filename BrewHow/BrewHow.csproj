@@ -41,9 +41,12 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.Composition.Registration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Reflection.Context" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -159,7 +162,9 @@
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\MefDependencyResolver.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\ServiceLocatorConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -168,8 +173,11 @@
     <Compile Include="Domain\Entities\RecipeEntity.cs" />
     <Compile Include="Domain\Entities\ReviewEntity.cs" />
     <Compile Include="Domain\Entities\StyleEntity.cs" />
-    <Compile Include="Domain\Repositories\RepositoryBase.cs" />
-    <Compile Include="Domain\Repositories\StyleRepository.cs" />
+    <Compile Include="Domain\Repositories\IRecipeRepository.cs" />
+    <Compile Include="Domain\Repositories\IReviewRepository.cs" />
+    <Compile Include="Domain\Repositories\IStyleRepository.cs" />
+    <Compile Include="Infrastructure\Repositories\RepositoryBase.cs" />
+    <Compile Include="Infrastructure\Repositories\StyleRepository.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -184,8 +192,9 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
-    <Compile Include="Models\BrewHowContext.cs" />
+    <Compile Include="Infrastructure\Repositories\BrewHowContext.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\IBrewHowContext.cs" />
     <Compile Include="ViewModels\IPagedResult.cs" />
     <Compile Include="ViewModels\ITypedPagedResult.cs" />
     <Compile Include="ViewModels\PagedResult.cs" />
@@ -193,8 +202,8 @@
     <Compile Include="Models\Review.cs" />
     <Compile Include="Models\Style.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Domain\Repositories\RecipeRepository.cs" />
-    <Compile Include="Domain\Repositories\ReviewRepository.cs" />
+    <Compile Include="Infrastructure\Repositories\RecipeRepository.cs" />
+    <Compile Include="Infrastructure\Repositories\ReviewRepository.cs" />
     <Compile Include="ViewModels\RecipeEditViewModel.cs" />
     <Compile Include="ViewModels\RecipeDisplayViewModel.cs" />
     <Compile Include="ViewModels\StyleDisplayViewModel.cs" />
@@ -321,7 +330,9 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201306160117251_InitialCreate.resx">

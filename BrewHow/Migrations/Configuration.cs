@@ -4,14 +4,14 @@ namespace BrewHow.Migrations
     using System.Data.Entity.Migrations;
     using BrewHow.Models;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<BrewHow.Models.BrewHowContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<BrewHow.Infrastructure.Repositories.BrewHowContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(BrewHow.Models.BrewHowContext context)
+        protected override void Seed(BrewHow.Infrastructure.Repositories.BrewHowContext context)
         {
             var brownAle = new Style { Name = "Brown Ale", Category = Category.Ale };
             var milkStout = new Style { Name = "Sweet/Milk Stout", Category = Category.Ale };

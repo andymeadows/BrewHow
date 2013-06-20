@@ -4,11 +4,12 @@ using System.Linq;
 using System.Linq.Expressions;
 
 using BrewHow.Domain.Entities;
+using BrewHow.Domain.Repositories;
 using BrewHow.Models;
 
-namespace BrewHow.Domain.Repositories
+namespace BrewHow.Infrastructure.Repositories
 {
-    public class ReviewRepository : RepositoryBase
+    public class ReviewRepository : RepositoryBase, IReviewRepository
     {
         private static readonly Expression<Func<Review, ReviewEntity>> AsReviewEntity =
             r => new ReviewEntity

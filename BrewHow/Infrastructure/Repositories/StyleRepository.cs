@@ -3,14 +3,13 @@ using System.Linq;
 using System.Linq.Expressions;
 
 using BrewHow.Domain.Entities;
+using BrewHow.Domain.Repositories;
 using BrewHow.Models;
 
-namespace BrewHow.Domain.Repositories 
+namespace BrewHow.Infrastructure.Repositories
 {
-    public class StyleRepository : RepositoryBase
+    public class StyleRepository : RepositoryBase, IStyleRepository
     {
-        private BrewHowContext Context = new BrewHowContext();
-
         private static readonly Expression<Func<Style, StyleEntity>> AsStyleEntity =
             s => new StyleEntity
             {

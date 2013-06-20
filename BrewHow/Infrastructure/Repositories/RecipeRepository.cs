@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 
 using BrewHow.Domain.Entities;
+using BrewHow.Domain.Repositories;
 using BrewHow.Models;
 
-namespace BrewHow.Domain.Repositories
+namespace BrewHow.Infrastructure.Repositories
 {
-    public class RecipeRepository : RepositoryBase
+    public class RecipeRepository : RepositoryBase, IRecipeRepository
     {
         private static readonly Expression<Func<Recipe, RecipeEntity>> AsRecipeEntity =
             r => new RecipeEntity

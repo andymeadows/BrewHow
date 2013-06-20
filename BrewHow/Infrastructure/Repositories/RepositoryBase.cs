@@ -2,7 +2,7 @@
 
 using BrewHow.Models;
 
-namespace BrewHow.Domain.Repositories
+namespace BrewHow.Infrastructure.Repositories
 {
     public abstract class RepositoryBase : IDisposable
     {
