@@ -5,7 +5,7 @@ using BrewHow.Domain.Entities;
 
 namespace BrewHow.Domain.Repositories
 {
-    public interface IRecipeRepository : IDisposable
+    public interface IRecipeRepository
     {
         RecipeEntity GetRecipe(int recipeId);
         IQueryable<RecipeEntity> GetRecipes();

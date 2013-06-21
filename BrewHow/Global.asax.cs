@@ -23,5 +23,10 @@ namespace BrewHow
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
         }
+
+        protected void Application_EndRequest()
+        {
+            using (DependencyResolver.Current as IDisposable) { }
+        }
     }
 }

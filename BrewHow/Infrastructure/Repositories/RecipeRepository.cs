@@ -11,17 +11,10 @@ namespace BrewHow.Infrastructure.Repositories
 {
     public class RecipeRepository : RepositoryBase, IRecipeRepository
     {
-        private static readonly Expression<Func<Recipe, RecipeEntity>> AsRecipeEntity =
-            r => new RecipeEntity
-            {
-                RecipeId = r.RecipeId,
-                Name = r.Name,
-                OriginalGravity = r.OriginalGravity,
-                FinalGravity = r.FinalGravity,
-                GrainBill = r.GrainBill,
-                Instructions = r.Instructions,
-                Style = new StyleEntity { Name = r.Style.Name, StyleId = r.Style.StyleId, Category = (CategoryEntity)r.Style.Category }
-            };
+        public RecipeRepository(IBrewHowContext context)
+            : base(context)
+        {
+        }
 
         /// <summary>
         /// Retrieve all recipes from the repository
@@ -84,8 +77,8 @@ namespace BrewHow.Infrastructure.Repositories
 
             this.
                 Context
-                .Entry<Style>(existingStyleModel)
-                .State = System.Data.EntityState.Unchanged;
+                .Styles
+                .Attach(existingStyleModel);
 
             if (recipeEntity.RecipeId == 0)
             {
@@ -139,6 +132,21 @@ namespace BrewHow.Infrastructure.Repositories
             }
         }
 
+        /// <summary>
+        /// Expression to convert a Recipe model to a 
+        /// RecipeEntity domain model.
+        /// </summary>
+        private static readonly Expression<Func<Recipe, RecipeEntity>> AsRecipeEntity =
+            r => new RecipeEntity
+            {
+                RecipeId = r.RecipeId,
+                Name = r.Name,
+                OriginalGravity = r.OriginalGravity,
+                FinalGravity = r.FinalGravity,
+                GrainBill = r.GrainBill,
+                Instructions = r.Instructions,
+                Style = new StyleEntity { Name = r.Style.Name, StyleId = r.Style.StyleId, Category = (CategoryEntity)r.Style.Category }
+            };
 
         /// <summary>
         /// Assigns the values of a Recipe entity's 
@@ -195,6 +203,14 @@ namespace BrewHow.Infrastructure.Repositories
                 default:
                     return Category.Ale;
             }
+        }
+
+        public void Dispose()
+        {
+            System.Diagnostics.Debug.WriteLine("Harhar.");
+            System.Diagnostics.Debugger.Break();
+            Console.WriteLine("Shot.");
+            System.Diagnostics.Debugger.Log(1, "Help", "Message");
         }
     }
 }
