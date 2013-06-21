@@ -4,42 +4,17 @@ using BrewHow.Models;
 
 namespace BrewHow.Infrastructure.Repositories
 {
-    public abstract class RepositoryBase : IDisposable
+    public abstract class RepositoryBase
     {
-        public RepositoryBase()
+        public RepositoryBase(IBrewHowContext context)
         {
-            this.Context = new BrewHowContext();
+            this.Context = context;
         }
 
-        public BrewHowContext Context
+        public IBrewHowContext Context
         {
             get;
             private set;
         }
-
-        #region IDisposable Implementation
-
-        private bool _disposed = false;
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this._disposed)
-            {
-                if (disposing)
-                {
-                    this.Context.Dispose();
-                    this.Context = null;
-                }
-            }
-            this._disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -11,14 +10,10 @@ namespace BrewHow.Infrastructure.Repositories
 {
     public class ReviewRepository : RepositoryBase, IReviewRepository
     {
-        private static readonly Expression<Func<Review, ReviewEntity>> AsReviewEntity =
-            r => new ReviewEntity
-            {
-                ReviewId = r.ReviewId,
-                Comment = r.Comment,
-                Rating = r.Rating
-            };
-
+        public ReviewRepository(IBrewHowContext context)
+            : base(context)
+        {
+        }
 
         public ReviewEntity GetReview(int reviewId)
         {
@@ -109,5 +104,12 @@ namespace BrewHow.Infrastructure.Repositories
             reviewModel.Comment = reviewEntity.Comment;
         }
 
+        private static readonly Expression<Func<Review, ReviewEntity>> AsReviewEntity =
+            r => new ReviewEntity
+            {
+                ReviewId = r.ReviewId,
+                Comment = r.Comment,
+                Rating = r.Rating
+            };
     }
 }

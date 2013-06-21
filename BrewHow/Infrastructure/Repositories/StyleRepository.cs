@@ -10,13 +10,10 @@ namespace BrewHow.Infrastructure.Repositories
 {
     public class StyleRepository : RepositoryBase, IStyleRepository
     {
-        private static readonly Expression<Func<Style, StyleEntity>> AsStyleEntity =
-            s => new StyleEntity
-            {
-                StyleId = s.StyleId,
-                Name = s.Name,
-                Category = (CategoryEntity) s.Category
-            };
+        public StyleRepository(IBrewHowContext context)
+            : base(context)
+        {
+        }
 
         public IQueryable<StyleEntity> GetStyles()
         {
@@ -39,5 +36,13 @@ namespace BrewHow.Infrastructure.Repositories
                     .Select(AsStyleEntity);
             }
         }
+
+        private static readonly Expression<Func<Style, StyleEntity>> AsStyleEntity =
+            s => new StyleEntity
+            {
+                StyleId = s.StyleId,
+                Name = s.Name,
+                Category = (CategoryEntity) s.Category
+            };
     }
 }

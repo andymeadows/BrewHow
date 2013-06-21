@@ -2,8 +2,8 @@
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Registration;
-using System.Web.Mvc;
 using System.Reflection;
+using System.Web.Mvc;
 
 using BrewHow.Domain.Repositories;
 using BrewHow.Models;
