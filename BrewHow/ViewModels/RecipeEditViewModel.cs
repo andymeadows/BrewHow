@@ -35,6 +35,9 @@ namespace BrewHow.ViewModels
         [DataType(DataType.MultilineText)]
         public string Instructions { get; set; }
 
+        [HiddenInput(DisplayValue = false)]
+        public string Slug { get; set; }
+
         public SelectList StyleList { get; set; }
     }
 }

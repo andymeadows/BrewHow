@@ -9,5 +9,6 @@ namespace BrewHow.Domain.Repositories
     {
         StyleEntity GetStyle(int styleId);
         IQueryable<StyleEntity> GetStyles();
+        StyleEntity GetStyleBySlug(string slug);
     }
 }

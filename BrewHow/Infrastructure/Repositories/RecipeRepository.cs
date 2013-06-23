@@ -45,11 +45,11 @@ namespace BrewHow.Infrastructure.Repositories
         /// <param name="styleName">Used to filter
         /// recipes by style.</param>
         /// <returns>A queryable collection of Recipe entities</returns>
-        public IQueryable<RecipeEntity> GetRecipesByStyle(string styleName)
+        public IQueryable<RecipeEntity> GetRecipesByStyleSlug(string styleSlug)
         {
             return this
                 .RecipeEntities
-                .Where(r => r.Style.Name == styleName);
+                .Where(r => r.Style.Slug == styleSlug);
         }
 
         /// <summary>
@@ -84,7 +84,10 @@ namespace BrewHow.Infrastructure.Repositories
             {
                 var newRecipeModel = new Recipe();
                 this.Context.Recipes.Add(newRecipeModel);
+
+                // Assign the properties that can only be assigned on creation.
                 newRecipeModel.Style = existingStyleModel;
+                newRecipeModel.Slug = recipeEntity.Slug;
 
                 AssignEntityToModel(recipeEntity, newRecipeModel);
 
@@ -145,7 +148,14 @@ namespace BrewHow.Infrastructure.Repositories
                 FinalGravity = r.FinalGravity,
                 GrainBill = r.GrainBill,
                 Instructions = r.Instructions,
-                Style = new StyleEntity { Name = r.Style.Name, StyleId = r.Style.StyleId, Category = (CategoryEntity)r.Style.Category }
+                Slug = r.Slug,
+                Style = new StyleEntity 
+                { 
+                    Name = r.Style.Name, 
+                    StyleId = r.Style.StyleId, 
+                    Category = (CategoryEntity)r.Style.Category,
+                    Slug = r.Style.Slug
+                }
             };
 
         /// <summary>
@@ -185,6 +195,7 @@ namespace BrewHow.Infrastructure.Repositories
             dbStyle.Name = style.Name;
             dbStyle.StyleId = style.StyleId;
             dbStyle.Category = ConvertToModel(style.Category);
+            dbStyle.Slug = style.Slug;
         }
 
         /// <summary>
@@ -203,14 +214,6 @@ namespace BrewHow.Infrastructure.Repositories
                 default:
                     return Category.Ale;
             }
-        }
-
-        public void Dispose()
-        {
-            System.Diagnostics.Debug.WriteLine("Harhar.");
-            System.Diagnostics.Debugger.Break();
-            Console.WriteLine("Shot.");
-            System.Diagnostics.Debugger.Log(1, "Help", "Message");
         }
     }
 }

@@ -25,6 +25,14 @@ namespace BrewHow.Infrastructure.Repositories
             return this.StyleEntities.FirstOrDefault(s => s.StyleId == styleId);
         }
 
+        public StyleEntity GetStyleBySlug(string slug)
+        {
+            return this
+                .StyleEntities
+                .FirstOrDefault(
+                    s => s.Slug == slug);
+        }
+
         private IQueryable<StyleEntity> StyleEntities
         {
             get
@@ -42,7 +50,8 @@ namespace BrewHow.Infrastructure.Repositories
             {
                 StyleId = s.StyleId,
                 Name = s.Name,
-                Category = (CategoryEntity) s.Category
+                Category = (CategoryEntity) s.Category,
+                Slug = s.Slug
             };
     }
 }

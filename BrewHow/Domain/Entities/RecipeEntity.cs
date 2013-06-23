@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace BrewHow.Domain.Entities
 {
     public class RecipeEntity
     {
+        private string _slug;
+
         public RecipeEntity()
         {
             this.Style = new StyleEntity();
@@ -22,6 +25,49 @@ namespace BrewHow.Domain.Entities
             get 
             { 
                 return (this.OriginalGravity - this.FinalGravity) * 131.25f; 
+            }
+        }
+
+        /// <summary>
+        /// Gets or Sets the slug for the recipe. A slug 
+        /// can be set once and only once.  If it is not
+        /// set implicitly, it is set upon first retrieval
+        /// from the recipe’s name.
+        /// </summary>
+        public string Slug
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this._slug))
+                {
+                    if (string.IsNullOrEmpty(this.Name))
+                    {
+                        return string.Empty;
+                    }
+
+                    // Construct the slug.  We only need to do this on a request.
+                    // and we only need to do it once.
+                    // Need to remove the -'s.  We'll put them back.
+//                    this._slug = this.Name.ToLower().Trim().Replace("-", " ");
+                    // Convert all unwanted characters to spaces
+                    this._slug = Regex.Replace(this.Name.ToLower().Trim(), "[^a-z0-9-]", "-");
+//                    this._slug = Regex.Replace(this._slug, "[^a-z0-9\\s-]", "-");
+                    //// Replace spaces with -
+                    //this._slug = this._slug.Replace(" ", "-");
+                }
+
+                return this._slug;
+            }
+
+            set
+            {
+                if (!string.IsNullOrEmpty(this._slug))
+                {
+                    throw new InvalidOperationException(
+                        "The slug for the recipe has already been set.");
+                }
+
+                this._slug = value;
             }
         }
     }

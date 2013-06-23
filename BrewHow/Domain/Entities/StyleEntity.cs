@@ -7,5 +7,6 @@ namespace BrewHow.Domain.Entities
         public int StyleId { get; set; }
         public CategoryEntity Category { get; set; }
         public string Name { get; set; }
+        public string Slug { get; set; }
     }
 }

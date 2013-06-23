@@ -14,6 +14,7 @@ namespace BrewHow.Models
         public float FinalGravity { get; set; }
         public string GrainBill { get; set; }
         public string Instructions { get; set; }
+        public string Slug { get; set; }
 
         public virtual ICollection<Review> Reviews { get; set; }
     }

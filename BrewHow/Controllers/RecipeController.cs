@@ -16,8 +16,8 @@ namespace BrewHow.Controllers
         // Create references to the repositories used 
         // to retrieve and persist entities used by 
         // the recipe controller.
-        private IRecipeRepository _recipeRepository;
-        private IStyleRepository _styleRepository;
+        private readonly IRecipeRepository _recipeRepository;
+        private readonly IStyleRepository _styleRepository;
 
         public RecipeController(IRecipeRepository recipeRepository,
             IStyleRepository styleRepository)
@@ -31,12 +31,36 @@ namespace BrewHow.Controllers
         // recipes in the system.
         public ActionResult Index(int page = 0)
         {
-            var model = new PagedResult<RecipeEntity, RecipeDisplayViewModel>(
-                _recipeRepository.GetRecipes(), 
+            PagedResult<RecipeEntity, RecipeDisplayViewModel>
+                model = null;
+
+            model = new PagedResult<RecipeEntity, RecipeDisplayViewModel>(
+                _recipeRepository.GetRecipes(),
                 page,
                 ToDisplayModel);
 
             return View(model);
+        }
+
+        // Retrieve all of the recipes of a certain style.
+        public ActionResult Style(string style, int page = 0)
+        {
+            PagedResult<RecipeEntity, RecipeDisplayViewModel>
+                model = null;
+
+            model = new PagedResult<RecipeEntity, RecipeDisplayViewModel>(
+                _recipeRepository.GetRecipesByStyleSlug(style),
+                page,
+                ToDisplayModel);
+
+            var styleEntity = _styleRepository.GetStyleBySlug(style);
+
+            if (style != null)
+            {
+                ViewBag.Title = styleEntity.Name + " Recipes";
+            }
+
+            return View("Index", model);
         }
 
         // Retrieve the details of a recipe from the
@@ -145,6 +169,8 @@ namespace BrewHow.Controllers
                 PercentAlcoholByVolume = entity.PercentAlcoholByVolume,
                 GrainBill = entity.GrainBill,
                 Instructions = entity.Instructions,
+                Slug = entity.Slug,
+                StyleSlug = entity.Style.Slug
             };
         }
 
@@ -174,12 +200,13 @@ namespace BrewHow.Controllers
                 editModel.OriginalGravity = recipe.OriginalGravity;
                 editModel.RecipeId = recipe.RecipeId;
                 editModel.StyleId = recipe.Style.StyleId;
+                editModel.Slug = recipe.Slug;
             }
 
             return editModel;
         }
 
-        // Convert a recipe edit ViewModel to a recipe
+        // Convert a recipe edit view model to a recipe
         // entity for persistance.
         private RecipeEntity ToEntity(RecipeEditViewModel viewModel)
         {
@@ -203,28 +230,9 @@ namespace BrewHow.Controllers
                 Name = viewModel.Name,
                 OriginalGravity = viewModel.OriginalGravity,
                 RecipeId = viewModel.RecipeId,
+                Slug = viewModel.Slug,
                 Style = style,
             };
         }
-
-        /// <summary>
-        /// Called when the controller is being disposed.  
-        /// Clean up any resources that implement disposable
-        /// and are being maintained as a reference.
-        /// </summary>
-        /// <param name="disposing"></param>
-        //protected override void Dispose(bool disposing)
-        //{
-        //    if (disposing)
-        //    {
-        //        this._recipeRepository.Dispose();
-        //        this._recipeRepository = null;
-
-        //        this._styleRepository.Dispose();
-        //        this._styleRepository = null;
-        //    }
-
-        //    base.Dispose(disposing);
-        //}
     }
 }

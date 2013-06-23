@@ -1,10 +1,10 @@
 ﻿@model BrewHow.ViewModels.ITypedPagedResult<BrewHow.ViewModels.RecipeDisplayViewModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = ViewBag.Title ?? "Recipes";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -28,10 +28,10 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.ActionLink(item.Name, "Details", new { id=item.RecipeId })
+            @Html.ActionLink(item.Name, "Details", new { id=item.RecipeId, slug=item.Slug })
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Style)
+            @Html.ActionLink(Html.DisplayFor(modelItem => item.Style).ToHtmlString(), "Style", "Recipe", new { style = item.StyleSlug }, null)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.OriginalGravity)

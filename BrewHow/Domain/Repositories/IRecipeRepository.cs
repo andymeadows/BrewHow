@@ -9,7 +9,7 @@ namespace BrewHow.Domain.Repositories
     {
         RecipeEntity GetRecipe(int recipeId);
         IQueryable<RecipeEntity> GetRecipes();
-        IQueryable<RecipeEntity> GetRecipesByStyle(string styleName);
+        IQueryable<RecipeEntity> GetRecipesByStyleSlug(string styleSlug);
         void Save(RecipeEntity recipeEntity);
     }
 }

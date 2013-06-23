@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace BrewHow.ViewModels
 {
@@ -36,5 +37,11 @@ namespace BrewHow.ViewModels
         [Display(Name = "ABV")]
         [DisplayFormat(DataFormatString = "{0:0.00}")]
         public float PercentAlcoholByVolume { get; set; }
+
+        [HiddenInput(DisplayValue = false)]
+        public string Slug { get; set; }
+
+        [HiddenInput(DisplayValue = false)]
+        public string StyleSlug { get; set; }
     }
 }

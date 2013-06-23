@@ -66,6 +66,6 @@
     </div>
 </fieldset>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.RecipeId }) |
+    @Html.ActionLink("Edit", "Edit", new { id=Model.RecipeId, slug = Model.Slug }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

@@ -20,6 +20,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -163,12 +165,14 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\MefDependencyResolver.cs" />
+    <Compile Include="App_Start\RecipeStyleConstraint.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\ServiceLocatorConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
+    <Compile Include="Controllers\StyleController.cs" />
     <Compile Include="Domain\Entities\CategoryEntity.cs" />
     <Compile Include="Domain\Entities\RecipeEntity.cs" />
     <Compile Include="Domain\Entities\ReviewEntity.cs" />
@@ -189,6 +193,10 @@
     <Compile Include="Migrations\201306160123267_Reviews.cs" />
     <Compile Include="Migrations\201306160123267_Reviews.Designer.cs">
       <DependentUpon>201306160123267_Reviews.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201306222242199_Slugs.cs" />
+    <Compile Include="Migrations\201306222242199_Slugs.Designer.cs">
+      <DependentUpon>201306222242199_Slugs.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
@@ -325,6 +333,7 @@
     <Content Include="Views\Recipe\Create.cshtml" />
     <Content Include="Views\Recipe\Edit.cshtml" />
     <Content Include="Views\Shared\PagingPartial.cshtml" />
+    <Content Include="Views\Style\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -340,6 +349,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201306160123267_Reviews.resx">
       <DependentUpon>201306160123267_Reviews.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201306222242199_Slugs.resx">
+      <DependentUpon>201306222242199_Slugs.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
@@ -370,6 +382,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
