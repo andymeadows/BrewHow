@@ -69,3 +69,12 @@
     @Html.ActionLink("Edit", "Edit", new { id=Model.RecipeId, slug = Model.Slug }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+@{Html.RenderAction(
+	"Index", 
+	"Recipe", 
+	new { 
+		area = "Review", 
+		id = Model.RecipeId, 
+		slug = Model.Slug 
+	});
+}

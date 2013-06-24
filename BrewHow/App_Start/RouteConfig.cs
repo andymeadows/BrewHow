@@ -21,8 +21,9 @@ namespace BrewHow
 		            action = "Style" 
 	            },
 	            constraints: new { 
-		            style = new RecipeStyleConstraint() 
-	            }
+		            style = new RecipeStyleConstraint()
+                },
+                namespaces: new [] { "BrewHow.Controllers" }	            
             );
 
             routes.MapRoute(
@@ -32,8 +33,9 @@ namespace BrewHow
                     controller = "Recipe", 
                     action = "Index", 
                     id = UrlParameter.Optional, 
-                    slug = UrlParameter.Optional 
-                }
+                    slug = UrlParameter.Optional
+                },
+                namespaces: new[] { "BrewHow.Controllers" }	            
             );
         }
     }

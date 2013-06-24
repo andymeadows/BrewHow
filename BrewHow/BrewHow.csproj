@@ -169,6 +169,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\ServiceLocatorConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Review\Controllers\RecipeController.cs" />
+    <Compile Include="Areas\Review\ReviewAreaRegistration.cs" />
+    <Compile Include="Areas\Review\ViewModels\ReviewEditViewModel.cs" />
+    <Compile Include="Areas\Review\ViewModels\ReviewListViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
@@ -274,6 +278,9 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Areas\Review\Views\Web.config" />
+    <Content Include="Areas\Review\Views\Recipe\Index.cshtml" />
+    <Content Include="Areas\Review\Views\Recipe\Create.cshtml" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
@@ -337,6 +344,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Review\Models\" />
+    <Folder Include="Areas\Review\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

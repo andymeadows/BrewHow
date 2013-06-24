@@ -45,10 +45,7 @@ namespace BrewHow.Controllers
         // Retrieve all of the recipes of a certain style.
         public ActionResult Style(string style, int page = 0)
         {
-            PagedResult<RecipeEntity, RecipeDisplayViewModel>
-                model = null;
-
-            model = new PagedResult<RecipeEntity, RecipeDisplayViewModel>(
+            var model = new PagedResult<RecipeEntity, RecipeDisplayViewModel>(
                 _recipeRepository.GetRecipesByStyleSlug(style),
                 page,
                 ToDisplayModel);

@@ -45,15 +45,7 @@ namespace BrewHow.Domain.Entities
                         return string.Empty;
                     }
 
-                    // Construct the slug.  We only need to do this on a request.
-                    // and we only need to do it once.
-                    // Need to remove the -'s.  We'll put them back.
-//                    this._slug = this.Name.ToLower().Trim().Replace("-", " ");
-                    // Convert all unwanted characters to spaces
                     this._slug = Regex.Replace(this.Name.ToLower().Trim(), "[^a-z0-9-]", "-");
-//                    this._slug = Regex.Replace(this._slug, "[^a-z0-9\\s-]", "-");
-                    //// Replace spaces with -
-                    //this._slug = this._slug.Replace(" ", "-");
                 }
 
                 return this._slug;
