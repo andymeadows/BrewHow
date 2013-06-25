@@ -2,12 +2,15 @@
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
+using BrewHow.Validations;
+
 namespace BrewHow.ViewModels
 {
     /// <summary>
     /// This ViewModel is used by views wishing
     /// to perform edits on a recipe entity.
     /// </summary>
+    [MetadataType(typeof(RecipeValidationMetadata))]
     public class RecipeEditViewModel
     {
         [Key]

@@ -35,6 +35,7 @@ namespace BrewHow.Areas.Review.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(int id, ReviewEditViewModel reviewEditViewModel)
         {
             try

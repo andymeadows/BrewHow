@@ -202,11 +202,16 @@
     <Compile Include="Migrations\201306222242199_Slugs.Designer.cs">
       <DependentUpon>201306222242199_Slugs.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201306250424487_RecipeValidation.cs" />
+    <Compile Include="Migrations\201306250424487_RecipeValidation.Designer.cs">
+      <DependentUpon>201306250424487_RecipeValidation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Infrastructure\Repositories\BrewHowContext.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\IBrewHowContext.cs" />
+    <Compile Include="Validations\RecipeValidationMetadata.cs" />
     <Compile Include="ViewModels\IPagedResult.cs" />
     <Compile Include="ViewModels\ITypedPagedResult.cs" />
     <Compile Include="ViewModels\PagedResult.cs" />
@@ -361,6 +366,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201306222242199_Slugs.resx">
       <DependentUpon>201306222242199_Slugs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201306250424487_RecipeValidation.resx">
+      <DependentUpon>201306250424487_RecipeValidation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

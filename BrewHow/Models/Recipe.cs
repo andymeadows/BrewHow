@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.ComponentModel.DataAnnotations;
+
+using BrewHow.Validations;
 
 namespace BrewHow.Models
 {
+    [MetadataType(typeof(RecipeValidationMetadata))]
     public class Recipe
     {
         public int RecipeId { get; set; }

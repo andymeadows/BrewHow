@@ -88,19 +88,24 @@ namespace BrewHow.Controllers
         // requests.  The runtime will use model
         // binding to populate the recipe parameter.
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(RecipeEditViewModel recipe)
         {
             try
             {
-                this._recipeRepository.Save(
-                    ToEntity(recipe));
+                if (ModelState.IsValid)
+                {
+                    this._recipeRepository.Save(
+                        ToEntity(recipe));
 
-                return RedirectToAction("Index");
+                    return RedirectToAction("Index");
+                }
             }
             catch
             {
-                return View();
             }
+
+            return View(recipe);
         }
 
         // Return a view that allows the requestor
