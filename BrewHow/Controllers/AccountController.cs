@@ -8,18 +8,24 @@ using System.Web.Security;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
-using BrewHow.Filters;
 using BrewHow.Models;
+using BrewHow.Domain.Repositories;
+using BrewHow.Domain.Entities;
 
 namespace BrewHow.Controllers
 {
     [Authorize]
-    [InitializeSimpleMembership]
     public class AccountController : Controller
     {
+        private readonly IUserProfileRepository _userProfileRepository;
+
+        public AccountController(IUserProfileRepository userProfileRepository)
+        {
+            this._userProfileRepository = userProfileRepository;
+        }
+
         //
         // GET: /Account/Login
-
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
@@ -54,7 +60,7 @@ namespace BrewHow.Controllers
         {
             WebSecurity.Logout();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Recipe", new { area="" });
         }
 
         //
@@ -81,7 +87,7 @@ namespace BrewHow.Controllers
                 {
                     WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
                     WebSecurity.Login(model.UserName, model.Password);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Recipe", new { area="" });
                 }
                 catch (MembershipCreateUserException e)
                 {
@@ -263,25 +269,25 @@ namespace BrewHow.Controllers
             if (ModelState.IsValid)
             {
                 // Insert a new user into the database
-                using (UsersContext db = new UsersContext())
+                UserProfileEntity user = this._userProfileRepository.GetUser(model.UserName.ToLower());
+                // Check if user already exists
+                if (user == null)
                 {
-                    UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
-                    // Check if user already exists
-                    if (user == null)
-                    {
-                        // Insert name into the profile table
-                        db.UserProfiles.Add(new UserProfile { UserName = model.UserName });
-                        db.SaveChanges();
+                    // Insert name into the profile table
+                    this._userProfileRepository.Save(
+                        new UserProfileEntity
+                            {
+                                UserName = model.UserName
+                            });
 
-                        OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
-                        OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);
+                    OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
+                    OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);
 
-                        return RedirectToLocal(returnUrl);
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("UserName", "User name already exists. Please enter a different user name.");
-                    }
+                    return RedirectToLocal(returnUrl);
+                }
+                else
+                {
+                    ModelState.AddModelError("UserName", "User name already exists. Please enter a different user name.");
                 }
             }
 
@@ -337,7 +343,7 @@ namespace BrewHow.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Recipe", new { area = "" });
             }
         }
 

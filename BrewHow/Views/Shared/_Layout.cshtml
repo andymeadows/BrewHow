@@ -12,7 +12,7 @@
         <header>
             <div class="content-wrapper">
                 <div class="float-left">
-                    <p class="site-title">@Html.ActionLink("BrewHow", "Index", "Recipe")</p>
+                    <p class="site-title">@Html.ActionLink("BrewHow", "Index", "Recipe", new { area = "" }, null)</p>
                 </div>
                 <div class="float-right">
                     <section id="login">
@@ -20,7 +20,7 @@
                     </section>
                     <nav>
                         <ul id="menu">
-                            <li>@Html.ActionLink("Recipes", "Index", "Recipe")</li>
+                            <li>@Html.ActionLink("Recipes", "Index", "Recipe", new { area = "" }, null)</li>
                             <li>@Html.ActionLink("Styles", "Index", "Style")</li>
                         </ul>
                     </nav>

@@ -54,6 +54,10 @@ namespace BrewHow
             rb.ForTypesDerivedFrom<IReviewRepository>()
                 .Export<IReviewRepository>()
                 .SetCreationPolicy(CreationPolicy.NonShared);
+
+            rb.ForTypesDerivedFrom<IUserProfileRepository>()
+                .Export<IUserProfileRepository>()
+                .SetCreationPolicy(CreationPolicy.NonShared);
         }
 
         private static void RegisterControllers(RegistrationBuilder rb)

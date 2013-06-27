@@ -10,9 +10,10 @@ namespace BrewHow.Infrastructure.Repositories
         public IDbSet<Recipe> Recipes { get; set; }
         public IDbSet<Review> Reviews { get; set; }
         public IDbSet<Style> Styles { get; set; }
+        public IDbSet<UserProfile> UserProfiles { get; set; }
 
         public BrewHowContext()
-            : base("BrewHow.Models.BrewHowContext")
+            : base("DefaultConnection")
         {
         }
 

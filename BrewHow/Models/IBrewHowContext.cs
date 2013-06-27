@@ -8,6 +8,7 @@ namespace BrewHow.Models
         IDbSet<Recipe> Recipes { get; set; }
         IDbSet<Review> Reviews { get; set; }
         IDbSet<Style> Styles { get; set; }
+        IDbSet<UserProfile> UserProfiles { get; set; }
 
         int SaveChanges();
     }

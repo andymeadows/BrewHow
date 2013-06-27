@@ -75,6 +75,7 @@ namespace BrewHow.Controllers
 
         // Return a view that allows the requestor
         // to create new recipes.
+        [Authorize]
         public ActionResult Create()
         {
             return View(ToEditModel(null));
@@ -87,6 +88,7 @@ namespace BrewHow.Controllers
         // failure.  ONLY respond to HTTP POST
         // requests.  The runtime will use model
         // binding to populate the recipe parameter.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(RecipeEditViewModel recipe)
@@ -111,6 +113,7 @@ namespace BrewHow.Controllers
         // Return a view that allows the requestor
         // to edit a specific recipe.  Return to the
         // view a ViewModel representing the recipe.
+        [Authorize]
         public ActionResult Edit(int id)
         {
             var recipeToEdit = 
@@ -130,6 +133,8 @@ namespace BrewHow.Controllers
         // model binding to populate the recipe 
         // parameter.
         [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(RecipeEditViewModel recipe)
         {
             try

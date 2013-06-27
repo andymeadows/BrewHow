@@ -181,36 +181,27 @@
     <Compile Include="Domain\Entities\RecipeEntity.cs" />
     <Compile Include="Domain\Entities\ReviewEntity.cs" />
     <Compile Include="Domain\Entities\StyleEntity.cs" />
+    <Compile Include="Domain\Entities\UserProfileEntity.cs" />
     <Compile Include="Domain\Repositories\IRecipeRepository.cs" />
     <Compile Include="Domain\Repositories\IReviewRepository.cs" />
     <Compile Include="Domain\Repositories\IStyleRepository.cs" />
+    <Compile Include="Domain\Repositories\IUserProfileRepository.cs" />
     <Compile Include="Infrastructure\Repositories\RepositoryBase.cs" />
     <Compile Include="Infrastructure\Repositories\StyleRepository.cs" />
-    <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201306160117251_InitialCreate.cs" />
-    <Compile Include="Migrations\201306160117251_InitialCreate.Designer.cs">
-      <DependentUpon>201306160117251_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201306160123267_Reviews.cs" />
-    <Compile Include="Migrations\201306160123267_Reviews.Designer.cs">
-      <DependentUpon>201306160123267_Reviews.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201306222242199_Slugs.cs" />
-    <Compile Include="Migrations\201306222242199_Slugs.Designer.cs">
-      <DependentUpon>201306222242199_Slugs.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201306250424487_RecipeValidation.cs" />
-    <Compile Include="Migrations\201306250424487_RecipeValidation.Designer.cs">
-      <DependentUpon>201306250424487_RecipeValidation.cs</DependentUpon>
+    <Compile Include="Infrastructure\Repositories\UserProfileRepository.cs" />
+    <Compile Include="Migrations\201306270505022_InitialCreate.cs" />
+    <Compile Include="Migrations\201306270505022_InitialCreate.Designer.cs">
+      <DependentUpon>201306270505022_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Infrastructure\Repositories\BrewHowContext.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\IBrewHowContext.cs" />
+    <Compile Include="Models\UserProfile.cs" />
     <Compile Include="Validations\RecipeValidationMetadata.cs" />
     <Compile Include="ViewModels\IPagedResult.cs" />
     <Compile Include="ViewModels\ITypedPagedResult.cs" />
@@ -351,6 +342,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Review\Models\" />
     <Folder Include="Areas\Review\Views\Shared\" />
+    <Folder Include="Filters\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -358,17 +350,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201306160117251_InitialCreate.resx">
-      <DependentUpon>201306160117251_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201306160123267_Reviews.resx">
-      <DependentUpon>201306160123267_Reviews.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201306222242199_Slugs.resx">
-      <DependentUpon>201306222242199_Slugs.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201306250424487_RecipeValidation.resx">
-      <DependentUpon>201306250424487_RecipeValidation.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201306270505022_InitialCreate.resx">
+      <DependentUpon>201306270505022_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

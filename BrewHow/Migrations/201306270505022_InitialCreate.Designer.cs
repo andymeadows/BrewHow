@@ -5,13 +5,13 @@ namespace BrewHow.Migrations
     using System.Data.Entity.Migrations.Infrastructure;
     using System.Resources;
     
-    public sealed partial class Reviews : IMigrationMetadata
+    public sealed partial class InitialCreate : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Reviews));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialCreate));
         
         string IMigrationMetadata.Id
         {
-            get { return "201306160123267_Reviews"; }
+            get { return "201306270505022_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source
