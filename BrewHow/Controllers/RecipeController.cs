@@ -6,8 +6,9 @@ using System.Web.Mvc;
 
 using BrewHow.Domain.Entities;
 using BrewHow.Domain.Repositories;
-using BrewHow.ViewModels;
 using BrewHow.Models;
+using BrewHow.ViewModels;
+using BrewHow.ViewModels.Mappers;
 using WebMatrix.WebData;
 
 namespace BrewHow.Controllers
@@ -20,39 +21,47 @@ namespace BrewHow.Controllers
         private readonly IRecipeRepository _recipeRepository;
         private readonly IStyleRepository _styleRepository;
         private readonly IUserProfileEntityFactory _userProfileEntityFactory;
+        private readonly IRecipeDisplayViewModelMapper _displayViewModelMapper;
+        private readonly IRecipeEditViewModelMapper _editViewModelMapper;
 
         public RecipeController(IRecipeRepository recipeRepository,
             IStyleRepository styleRepository,
-            IUserProfileEntityFactory userProfileEntityFactory)
+            IUserProfileEntityFactory userProfileEntityFactory,
+            IRecipeDisplayViewModelMapper displayViewModelMapper,
+            IRecipeEditViewModelMapper editViewModelMapper)
             : base()
         {
             this._recipeRepository = recipeRepository;
             this._styleRepository = styleRepository;
             this._userProfileEntityFactory = userProfileEntityFactory;
+            this._displayViewModelMapper = displayViewModelMapper;
+            this._editViewModelMapper = editViewModelMapper;
         }
 
         // Respond to requests to ~/ with the list of
         // recipes in the system.
         public ActionResult Index(int page = 0)
         {
-            PagedResult<RecipeEntity, RecipeDisplayViewModel>
-                model = null;
+            var recipes = _recipeRepository.GetRecipes();
 
-            model = new PagedResult<RecipeEntity, RecipeDisplayViewModel>(
-                _recipeRepository.GetRecipes(),
+            var viewModel = new PagedResult<RecipeEntity, RecipeDisplayViewModel>(
+                recipes,
                 page,
-                ToDisplayModel);
+                this._displayViewModelMapper.EntityToViewModel);
 
-            return View(model);
+            return View(viewModel);
         }
 
         // Retrieve all of the recipes of a certain style.
         public ActionResult Style(string style, int page = 0)
         {
-            var model = new PagedResult<RecipeEntity, RecipeDisplayViewModel>(
-                _recipeRepository.GetRecipesByStyleSlug(style),
+            var recipesForStyle = 
+                _recipeRepository.GetRecipesByStyleSlug(style);
+
+            var viewModel = new PagedResult<RecipeEntity, RecipeDisplayViewModel>(
+                recipesForStyle,
                 page,
-                ToDisplayModel);
+                this._displayViewModelMapper.EntityToViewModel);
 
             var styleEntity = _styleRepository.GetStyleBySlug(style);
 
@@ -61,7 +70,7 @@ namespace BrewHow.Controllers
                 ViewBag.Title = styleEntity.Name + " Recipes";
             }
 
-            return View("Index", model);
+            return View("Index", viewModel);
         }
 
         // Retrieve the details of a recipe from the
@@ -69,12 +78,13 @@ namespace BrewHow.Controllers
         // view used to display them to the user.
         public ActionResult Details(int id)
         {
-            var model = ToDisplayModel(
-                this
-                ._recipeRepository
-                .GetRecipe(id));
+            var recipe = 
+                this._recipeRepository.GetRecipe(id);
 
-            return View(model);
+            var viewModel = 
+                this._displayViewModelMapper.EntityToViewModel(recipe);
+
+            return View(viewModel);
         }
 
         // Return a view that allows the requestor
@@ -82,7 +92,11 @@ namespace BrewHow.Controllers
         [Authorize]
         public ActionResult Create()
         {
-            return View(ToEditModel(null));
+            var viewModel = this
+                ._editViewModelMapper
+                .EntityToViewModel(null);
+
+            return View(viewModel);
         }
 
         // Respond to the request to create a new 
@@ -101,8 +115,10 @@ namespace BrewHow.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    this._recipeRepository.Save(
-                        ToEntity(recipe));
+                    var recipeEntity =
+                        this._editViewModelMapper.ViewModelToEntity(recipe);
+
+                    this._recipeRepository.Save(recipeEntity);
 
                     return RedirectToAction("Index");
                 }
@@ -129,10 +145,18 @@ namespace BrewHow.Controllers
             {
                 // Simply return the user to the detail view.
                 // Not too worried about the throw.
-                return RedirectToAction("Details", new { id = id });
+                return RedirectToAction("Details", 
+                    new 
+                    { 
+                        id = id 
+                    });
             }
 
-            return View(ToEditModel(recipeToEdit));
+            var viewModel = this
+                ._editViewModelMapper
+                .EntityToViewModel(recipeToEdit);
+
+            return View(viewModel);
         }
 
         // Respond to the request to edit an
@@ -162,8 +186,11 @@ namespace BrewHow.Controllers
                     return RedirectToAction("Details", new { id = recipe.RecipeId });
                 }
 
-                this._recipeRepository.Save(
-                    ToEntity(recipe));
+                var entityToSave = this
+                    ._editViewModelMapper
+                    .ViewModelToEntity(recipe);
+
+                this._recipeRepository.Save(entityToSave);
 
                 return RedirectToAction("Index");
             }
@@ -171,101 +198,6 @@ namespace BrewHow.Controllers
             {
                 return View();
             }
-        }
-
-        /// <summary>
-        /// Converts a recipe entity into the display model sent
-        /// to the view.
-        /// </summary>
-        /// <param name="entity">The entity to convert</param>
-        /// <returns>A RecipeDisplayViewModel that represents the underlying domain entity</returns>
-        private RecipeDisplayViewModel ToDisplayModel(RecipeEntity entity)
-        {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(
-                    "entity",
-                    "Cannot convert an entity to a view model when no entity is passed.");
-            }
-
-            return new RecipeDisplayViewModel
-            {
-                RecipeId = entity.RecipeId,
-                Name = entity.Name,
-                Category = entity.Style.Category.ToString(),
-                Style = entity.Style.Name,
-                OriginalGravity = entity.OriginalGravity,
-                FinalGravity = entity.FinalGravity,
-                PercentAlcoholByVolume = entity.PercentAlcoholByVolume,
-                GrainBill = entity.GrainBill,
-                Instructions = entity.Instructions,
-                Slug = entity.Slug,
-                StyleSlug = entity.Style.Slug,
-                ContributedBy = entity.Contributor.UserName,
-                CanEdit = CanEdit(entity)
-            };
-        }
-
-        // Convert a recipe entity to a recipe edit 
-        // ViewModel.  The ViewModel provides all of
-        // the data necessary for the view to 
-        // perform any edits on the recipe.
-        private RecipeEditViewModel ToEditModel(RecipeEntity recipe)
-        {
-            var editModel = new RecipeEditViewModel();
-
-            var styles = this._styleRepository.GetStyles();
-
-
-            editModel.StyleList = new SelectList(
-                styles,
-                "StyleId",
-                "Name",
-                0);
-
-            if (recipe != null)
-            {
-                editModel.FinalGravity = recipe.FinalGravity;
-                editModel.GrainBill = recipe.GrainBill;
-                editModel.Instructions = recipe.Instructions;
-                editModel.Name = recipe.Name;
-                editModel.OriginalGravity = recipe.OriginalGravity;
-                editModel.RecipeId = recipe.RecipeId;
-                editModel.StyleId = recipe.Style.StyleId;
-                editModel.Slug = recipe.Slug;
-            }
-
-            return editModel;
-        }
-
-        // Convert a recipe edit view model to a recipe
-        // entity for persistance.
-        private RecipeEntity ToEntity(RecipeEditViewModel viewModel)
-        {
-            if (viewModel == null)
-            {
-                throw new ArgumentNullException(
-                    "viewModel", 
-                    "Must have something to convert to an entity.");
-            }
-
-            var style = 
-                this
-                ._styleRepository
-                .GetStyle(viewModel.StyleId);
-
-            return new RecipeEntity
-            {
-                FinalGravity = viewModel.FinalGravity,
-                GrainBill = viewModel.GrainBill,
-                Instructions = viewModel.Instructions,
-                Name = viewModel.Name,
-                OriginalGravity = viewModel.OriginalGravity,
-                RecipeId = viewModel.RecipeId,
-                Slug = viewModel.Slug,
-                Style = style,
-                Contributor = this._userProfileEntityFactory.Create()
-            };
         }
 
         private bool CanEdit(RecipeEntity entity)

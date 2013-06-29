@@ -40,6 +40,16 @@ namespace BrewHow.Infrastructure.Repositories
                 .WithMany()
                 .Map(m => m.MapKey("ReviewerUserId"));
 
+            modelBuilder.Entity<UserProfile>()
+                .HasMany(r => r.Library)
+                .WithMany()
+                .Map(
+                m =>
+                {
+                    m.MapLeftKey("UserId");
+                    m.MapRightKey("RecipeId");
+                    m.ToTable("UserRecipeLibrary");
+                });
             base.OnModelCreating(modelBuilder);
         }
     }

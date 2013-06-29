@@ -4,6 +4,8 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
 
+using BrewHow.ViewModels.Mappers;
+
 namespace BrewHow.ViewModels
 {
     public class PagedResult<TFrom, TTo> : List<TTo>, ITypedPagedResult<TTo>

@@ -9,6 +9,7 @@ using BrewHow.Domain.Repositories;
 using BrewHow.Domain.Entities;
 
 using BrewHow.Models;
+using BrewHow.ViewModels.Mappers;
 
 namespace BrewHow
 {
@@ -24,6 +25,7 @@ namespace BrewHow
             RegisterRepositories(rb);
             RegisterControllers(rb);
             RegisterFactories(rb);
+            RegisterMappers(rb);
 
             ServiceLocatorConfig._container = new CompositionContainer(
                 new AssemblyCatalog(
@@ -74,6 +76,21 @@ namespace BrewHow
         {
             rb.ForTypesDerivedFrom<IUserProfileEntityFactory>()
                 .Export<IUserProfileEntityFactory>()
+                .SetCreationPolicy(CreationPolicy.NonShared);
+        }
+
+        private static void RegisterMappers(RegistrationBuilder rb)
+        {
+            rb.ForTypesDerivedFrom<IRecipeDisplayViewModelMapper>()
+                .Export<IRecipeDisplayViewModelMapper>()
+                .SetCreationPolicy(CreationPolicy.NonShared);
+
+            rb.ForTypesDerivedFrom<IRecipeEditViewModelMapper>()
+                .Export<IRecipeEditViewModelMapper>()
+                .SetCreationPolicy(CreationPolicy.NonShared);
+
+            rb.ForTypesDerivedFrom<IStyleDisplayViewModelMapper>()
+                .Export<IStyleDisplayViewModelMapper>()
                 .SetCreationPolicy(CreationPolicy.NonShared);
         }
     }

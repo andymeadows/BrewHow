@@ -175,6 +175,7 @@
     <Compile Include="Areas\Review\ViewModels\ReviewListViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LibraryController.cs" />
     <Compile Include="Controllers\RecipeController.cs" />
     <Compile Include="Controllers\StyleController.cs" />
     <Compile Include="Domain\Entities\CategoryEntity.cs" />
@@ -202,6 +203,10 @@
     <Compile Include="Migrations\201306272350246_Ownership.Designer.cs">
       <DependentUpon>201306272350246_Ownership.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201306290722260_Library.cs" />
+    <Compile Include="Migrations\201306290722260_Library.Designer.cs">
+      <DependentUpon>201306290722260_Library.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Infrastructure\Repositories\BrewHowContext.cs" />
@@ -211,6 +216,14 @@
     <Compile Include="Validations\RecipeValidationMetadata.cs" />
     <Compile Include="ViewModels\IPagedResult.cs" />
     <Compile Include="ViewModels\ITypedPagedResult.cs" />
+    <Compile Include="ViewModels\Mappers\IEntityToViewModelMapper.cs" />
+    <Compile Include="ViewModels\Mappers\Impl\RecipeDisplayViewModelMapper.cs" />
+    <Compile Include="ViewModels\Mappers\Impl\RecipeEditViewModelMapper.cs" />
+    <Compile Include="ViewModels\Mappers\Impl\StyleDisplayViewModelMapper.cs" />
+    <Compile Include="ViewModels\Mappers\IRecipeDisplayViewModelMapper.cs" />
+    <Compile Include="ViewModels\Mappers\IRecipeEditViewModelMapper.cs" />
+    <Compile Include="ViewModels\Mappers\IStyleDisplayViewModelMapper.cs" />
+    <Compile Include="ViewModels\Mappers\IViewModelToEntityMapper.cs" />
     <Compile Include="ViewModels\PagedResult.cs" />
     <Compile Include="Models\Recipe.cs" />
     <Compile Include="Models\Review.cs" />
@@ -343,6 +356,7 @@
     <Content Include="Views\Recipe\Edit.cshtml" />
     <Content Include="Views\Shared\PagingPartial.cshtml" />
     <Content Include="Views\Style\Index.cshtml" />
+    <Content Include="Views\Library\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -361,6 +375,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201306272350246_Ownership.resx">
       <DependentUpon>201306272350246_Ownership.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201306290722260_Library.resx">
+      <DependentUpon>201306290722260_Library.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

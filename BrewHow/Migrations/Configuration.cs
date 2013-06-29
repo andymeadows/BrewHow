@@ -37,12 +37,19 @@ namespace BrewHow.Migrations
                 heffeweisen
             );
 
+            var sweatyBrownAle = new Recipe { Name = "Sweaty Brown Ale", Style = brownAle, OriginalGravity = 1.05f, FinalGravity = 1.01f, Slug = "sweaty-brown-ale", Instructions = "None", GrainBill = "None", Contributor = brewMaster };
+            var festiveMilkStout = new Recipe { Name = "Festive Milk Stout", Style = milkStout, OriginalGravity = 1.058f, FinalGravity = 1.015f, Slug = "festive-milk-stout", Instructions = "None", GrainBill = "None", Contributor = brewMaster };
+            var andysHeffy = new Recipe { Name = "Andy's Heffy", Style = heffeweisen, OriginalGravity = 1.045f, FinalGravity = 1.012f, Slug = "andys-heffy", Instructions = "None", GrainBill = "None", Contributor = brewMaster };
+
             context.Recipes.AddOrUpdate(
                 recipe => recipe.Name,
-                new Recipe { Name = "Sweaty Brown Ale", Style = brownAle, OriginalGravity = 1.05f, FinalGravity = 1.01f, Slug = "sweaty-brown-ale", Instructions = "None", GrainBill = "None", Contributor = brewMaster  },
-                new Recipe { Name = "Festive Milk Stout", Style = milkStout, OriginalGravity = 1.058f, FinalGravity = 1.015f, Slug = "festive-milk-stout", Instructions = "None", GrainBill = "None", Contributor = brewMaster },
-                new Recipe { Name = "Andy's Heffy", Style = heffeweisen, OriginalGravity = 1.045f, FinalGravity = 1.012f, Slug = "andys-heffy", Instructions = "None", GrainBill = "None", Contributor = brewMaster }
+                sweatyBrownAle,
+                festiveMilkStout,
+                andysHeffy
             );
+
+            brewMaster.Library.Add(sweatyBrownAle);
+            brewMaster.Library.Add(festiveMilkStout);
         }
 
         private void SeedMembership(BrewHowContext context)

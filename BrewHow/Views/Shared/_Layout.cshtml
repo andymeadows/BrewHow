@@ -22,6 +22,9 @@
                         <ul id="menu">
                             <li>@Html.ActionLink("Recipes", "Index", "Recipe", new { area = "" }, null)</li>
                             <li>@Html.ActionLink("Styles", "Index", "Style")</li>
+                            @if (Request.IsAuthenticated) {
+                            <li>@Html.ActionLink("Library", "Index", "Library")</li>
+                            }
                         </ul>
                     </nav>
                 </div>
