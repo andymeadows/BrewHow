@@ -6,7 +6,7 @@
             @Html.DisplayNameFor(model => model.Rating)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Comment)
+            @Html.DisplayNameFor(model => model.Reviewer)
         </th>
         <th></th>
     </tr>
@@ -17,11 +17,17 @@
             @Html.DisplayFor(modelItem => item.Rating)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.Reviewer)
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
             @Html.DisplayFor(modelItem => item.Comment)
         </td>
     </tr>
 }
 </table>
+@if (Request.IsAuthenticated) {
 <p>
     @Html.ActionLink("Add Review", 
 		"Create", 
@@ -30,3 +36,4 @@
 			id = ViewBag.RecipeId 
 		} )
 </p>
+}

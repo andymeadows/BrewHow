@@ -72,13 +72,29 @@ namespace BrewHow.Infrastructure.Repositories
                     "Recipes require a style.");
             }
 
+            if (recipeEntity.Contributor == null)
+            {
+                throw new InvalidOperationException(
+                    "Recipes require a contributor.");
+            }
+
             var existingStyleModel = new Style();
             AssignEntityToModel(recipeEntity.Style, existingStyleModel);
 
-            this.
-                Context
+            this
+                .Context
                 .Styles
                 .Attach(existingStyleModel);
+
+            // Assumes the user already exists and the domain has validated
+            // this is the user that created the model
+            var existingUserModel = new UserProfile();
+            AssignEntityToModel(recipeEntity.Contributor, existingUserModel);
+
+            this
+                .Context
+                .UserProfiles
+                .Attach(existingUserModel);
 
             if (recipeEntity.RecipeId == 0)
             {
@@ -88,6 +104,8 @@ namespace BrewHow.Infrastructure.Repositories
                 // Assign the properties that can only be assigned on creation.
                 newRecipeModel.Style = existingStyleModel;
                 newRecipeModel.Slug = recipeEntity.Slug;
+
+                newRecipeModel.Contributor = existingUserModel;
 
                 AssignEntityToModel(recipeEntity, newRecipeModel);
 
@@ -130,6 +148,7 @@ namespace BrewHow.Infrastructure.Repositories
                     .Context
                     .Recipes
                     .Include("Style")
+                    .Include("Contributor")
                     .OrderBy(r => r.Name)
                     .Select(AsRecipeEntity); 
             }
@@ -149,6 +168,11 @@ namespace BrewHow.Infrastructure.Repositories
                 GrainBill = r.GrainBill,
                 Instructions = r.Instructions,
                 Slug = r.Slug,
+                Contributor = new UserProfileEntity
+                {
+                    UserId = r.Contributor.UserId,
+                    UserName = r.Contributor.UserName
+                },
                 Style = new StyleEntity 
                 { 
                     Name = r.Style.Name, 
@@ -196,6 +220,12 @@ namespace BrewHow.Infrastructure.Repositories
             dbStyle.StyleId = style.StyleId;
             dbStyle.Category = ConvertToModel(style.Category);
             dbStyle.Slug = style.Slug;
+        }
+
+        private void AssignEntityToModel(UserProfileEntity userProfile, UserProfile dbUserProfile)
+        {
+            dbUserProfile.UserId = userProfile.UserId;
+            dbUserProfile.UserName = userProfile.UserName;
         }
 
         /// <summary>

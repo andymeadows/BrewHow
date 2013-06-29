@@ -41,7 +41,13 @@ namespace BrewHow.ViewModels
         [HiddenInput(DisplayValue = false)]
         public string Slug { get; set; }
 
+        [Display(Name = "Contributor")]
+        public string ContributedBy { get; set; }
+
+        public bool CanEdit { get; set; }
+
         [HiddenInput(DisplayValue = false)]
         public string StyleSlug { get; set; }
+
     }
 }

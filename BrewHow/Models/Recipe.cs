@@ -18,6 +18,8 @@ namespace BrewHow.Models
         public string Instructions { get; set; }
         public string Slug { get; set; }
 
+        public UserProfile Contributor { get; set; }
+
         public virtual ICollection<Review> Reviews { get; set; }
     }
 }

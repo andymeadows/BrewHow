@@ -25,7 +25,20 @@ namespace BrewHow.Infrastructure.Repositories
 
             // Adjust the relationship between Style 
             // and Recipe to fix the key name.
-            modelBuilder.Entity<Recipe>().HasRequired(s => s.Style).WithMany(s => s.Recipes).Map(m => m.MapKey("StyleId"));
+            modelBuilder.Entity<Recipe>()
+                .HasRequired(s => s.Style)
+                .WithMany(s => s.Recipes)
+                .Map(m => m.MapKey("StyleId"));
+
+            modelBuilder.Entity<Recipe>()
+                .HasRequired(s => s.Contributor)
+                .WithMany()
+                .Map(m => m.MapKey("ContributorUserId"));
+
+            modelBuilder.Entity<Review>()
+                .HasRequired(r => r.Reviewer)
+                .WithMany()
+                .Map(m => m.MapKey("ReviewerUserId"));
 
             base.OnModelCreating(modelBuilder);
         }

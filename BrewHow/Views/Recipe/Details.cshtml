@@ -31,6 +31,13 @@
     </div>
 
     <div class="display-label">
+         @Html.DisplayNameFor(model => model.ContributedBy)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ContributedBy)
+    </div>
+
+    <div class="display-label">
          @Html.DisplayNameFor(model => model.OriginalGravity)
     </div>
     <div class="display-field">
@@ -66,8 +73,9 @@
     </div>
 </fieldset>
 <p>
-@if (Request.IsAuthenticated) {
-    @Html.ActionLink("Edit", "Edit", new { id=Model.RecipeId, slug = Model.Slug }) |
+@if (Model.CanEdit) {
+    @Html.ActionLink("Edit", "Edit", new { id=Model.RecipeId, slug = Model.Slug }) 
+    @:|
 }
     @Html.ActionLink("Back to List", "Index")
 </p>

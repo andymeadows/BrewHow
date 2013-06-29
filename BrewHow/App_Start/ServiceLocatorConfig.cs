@@ -6,6 +6,8 @@ using System.Reflection;
 using System.Web.Mvc;
 
 using BrewHow.Domain.Repositories;
+using BrewHow.Domain.Entities;
+
 using BrewHow.Models;
 
 namespace BrewHow
@@ -21,6 +23,7 @@ namespace BrewHow
             RegisterDbContexts(rb);
             RegisterRepositories(rb);
             RegisterControllers(rb);
+            RegisterFactories(rb);
 
             ServiceLocatorConfig._container = new CompositionContainer(
                 new AssemblyCatalog(
@@ -64,6 +67,13 @@ namespace BrewHow
         {
             rb.ForTypesDerivedFrom<Controller>()
                 .Export()
+                .SetCreationPolicy(CreationPolicy.NonShared);
+        }
+
+        private static void RegisterFactories(RegistrationBuilder rb)
+        {
+            rb.ForTypesDerivedFrom<IUserProfileEntityFactory>()
+                .Export<IUserProfileEntityFactory>()
                 .SetCreationPolicy(CreationPolicy.NonShared);
         }
     }

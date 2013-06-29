@@ -8,6 +8,7 @@ using BrewHow.Domain.Entities;
 using BrewHow.Domain.Repositories;
 using BrewHow.ViewModels;
 using BrewHow.Models;
+using WebMatrix.WebData;
 
 namespace BrewHow.Controllers
 {
@@ -18,13 +19,16 @@ namespace BrewHow.Controllers
         // the recipe controller.
         private readonly IRecipeRepository _recipeRepository;
         private readonly IStyleRepository _styleRepository;
+        private readonly IUserProfileEntityFactory _userProfileEntityFactory;
 
         public RecipeController(IRecipeRepository recipeRepository,
-            IStyleRepository styleRepository)
+            IStyleRepository styleRepository,
+            IUserProfileEntityFactory userProfileEntityFactory)
             : base()
         {
             this._recipeRepository = recipeRepository;
             this._styleRepository = styleRepository;
+            this._userProfileEntityFactory = userProfileEntityFactory;
         }
 
         // Respond to requests to ~/ with the list of
@@ -121,6 +125,13 @@ namespace BrewHow.Controllers
                 ._recipeRepository
                 .GetRecipe(id);
 
+            if (!CanEdit(recipeToEdit))
+            {
+                // Simply return the user to the detail view.
+                // Not too worried about the throw.
+                return RedirectToAction("Details", new { id = id });
+            }
+
             return View(ToEditModel(recipeToEdit));
         }
 
@@ -139,6 +150,18 @@ namespace BrewHow.Controllers
         {
             try
             {
+                // Yes, it's a bit chatty, but we need to 
+                // validate the entity from the database.
+                var recipeEntity =
+                    this._recipeRepository.GetRecipe(recipe.RecipeId);
+
+                if (!CanEdit(recipeEntity))
+                {
+                    // Simply return the user to the detail view.
+                    // Not too worried about the throw.
+                    return RedirectToAction("Details", new { id = recipe.RecipeId });
+                }
+
                 this._recipeRepository.Save(
                     ToEntity(recipe));
 
@@ -177,7 +200,9 @@ namespace BrewHow.Controllers
                 GrainBill = entity.GrainBill,
                 Instructions = entity.Instructions,
                 Slug = entity.Slug,
-                StyleSlug = entity.Style.Slug
+                StyleSlug = entity.Style.Slug,
+                ContributedBy = entity.Contributor.UserName,
+                CanEdit = CanEdit(entity)
             };
         }
 
@@ -239,7 +264,18 @@ namespace BrewHow.Controllers
                 RecipeId = viewModel.RecipeId,
                 Slug = viewModel.Slug,
                 Style = style,
+                Contributor = this._userProfileEntityFactory.Create()
             };
+        }
+
+        private bool CanEdit(RecipeEntity entity)
+        {
+            if (Request.IsAuthenticated)
+            {
+                return WebSecurity.CurrentUserId == entity.Contributor.UserId;
+            }
+
+            return false;
         }
     }
 }

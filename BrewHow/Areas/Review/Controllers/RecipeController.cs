@@ -10,11 +10,14 @@ namespace BrewHow.Areas.Review.Controllers
 {
     public class RecipeController : Controller
     {
-        private IReviewRepository _reviewRepository;
+        private readonly IReviewRepository _reviewRepository;
+        private readonly IUserProfileEntityFactory _userProfileEntityFactory;
 
-        public RecipeController(IReviewRepository reviewRepository)
+        public RecipeController(IReviewRepository reviewRepository,
+            IUserProfileEntityFactory userProfileEntityFactory)
         {
             this._reviewRepository = reviewRepository;
+            this._userProfileEntityFactory = userProfileEntityFactory;
         }
 
         public ActionResult Index(int id)
@@ -28,12 +31,14 @@ namespace BrewHow.Areas.Review.Controllers
             return PartialView(reviews.AsEnumerable().Select(s => ToListModel(s)));
         }
 
+        [Authorize]
         [HttpGet]
         public ActionResult Create(int id)
         {
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(int id, ReviewEditViewModel reviewEditViewModel)
@@ -71,6 +76,7 @@ namespace BrewHow.Areas.Review.Controllers
             {
                 Comment = review.Comment,
                 Rating = review.Rating,
+                Reviewer = review.Reviewer.UserName,
             };
         }
 
@@ -81,6 +87,7 @@ namespace BrewHow.Areas.Review.Controllers
                 RecipeId = recipeId,
                 Comment = viewModel.Comment,
                 Rating = viewModel.Rating,
+                Reviewer = this._userProfileEntityFactory.Create()
             };
         }
     }

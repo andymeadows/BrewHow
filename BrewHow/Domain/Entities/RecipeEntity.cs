@@ -19,6 +19,7 @@ namespace BrewHow.Domain.Entities
         public float FinalGravity { get; set; }
         public string GrainBill { get; set; }
         public string Instructions { get; set; }
+        public UserProfileEntity Contributor { get; set; }
 
         public float PercentAlcoholByVolume
         {

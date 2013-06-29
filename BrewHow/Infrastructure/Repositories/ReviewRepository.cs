@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -46,11 +47,23 @@ namespace BrewHow.Infrastructure.Repositories
                     "Cannot save review without a recipe.");
             }
 
+
             // It's a new review.
             if (review.ReviewId == 0)
             {
                 var modelReview = new Review();
                 AssignEntityToModel(review, modelReview);
+
+                var userProfile = new UserProfile();
+                userProfile.UserId = review.Reviewer.UserId;
+                userProfile.UserName = review.Reviewer.UserName;
+
+                this
+                    .Context
+                    .UserProfiles
+                    .Attach(userProfile);
+
+                modelReview.Reviewer = userProfile;
 
                 recipe.Reviews.Add(modelReview);
 
@@ -81,6 +94,7 @@ namespace BrewHow.Infrastructure.Repositories
                 return this
                     .Context
                     .Reviews
+                    .Include("Reviewer")
                     .OrderByDescending(r => r.ReviewId)
                     .Select(AsReviewEntity);
             }
@@ -109,7 +123,8 @@ namespace BrewHow.Infrastructure.Repositories
             {
                 ReviewId = r.ReviewId,
                 Comment = r.Comment,
-                Rating = r.Rating
+                Rating = r.Rating,
+                Reviewer = new UserProfileEntity { UserId = r.Reviewer.UserId, UserName = r.Reviewer.UserName }
             };
     }
 }
