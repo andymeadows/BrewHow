@@ -20,12 +20,17 @@
         <th>
             @Html.DisplayNameFor(model => model[0].FinalGravity)
         </th>
+@if(Request.IsAuthenticated) {
+        <th>
+
+        </th>
+}
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.ActionLink(item.Name, "Details", new { id=item.RecipeId, slug=item.Slug })
+            @Html.ActionLink(item.Name, "Details", "Recipe", new { id=item.RecipeId, slug=item.Slug }, null)
         </td>
         <td>
             @Html.ActionLink(Html.DisplayFor(modelItem => item.Style).ToHtmlString(), "Style", "Recipe", new { style = item.StyleSlug }, null)
@@ -36,9 +41,28 @@
         <td>
             @Html.DisplayFor(modelItem => item.FinalGravity)
         </td>
+@if (Request.IsAuthenticated) {
+        <td>
+            @Html.ActionLink("Remove from Library", "Delete", "Library", new { id = item.RecipeId }, new { @class = "remove-recipe", data_id = @item.RecipeId })
+        </td>
+}
     </tr>
 }
 
 </table>
 
 @{ Html.RenderPartial("PagingPartial", Model); }    
+
+@section scripts {
+<script type="text/javascript">
+    $(".remove-recipe").click(function(event) {
+        event.preventDefault();
+        $link = $(this);
+        $.post($link.attr('href'), "", function (response) {
+            if (response.result == "ok") {
+                $link.closest('tr').remove();
+            }
+        });
+    });
+</script>
+}

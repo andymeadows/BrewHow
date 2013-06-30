@@ -12,6 +12,7 @@ namespace BrewHow.Domain.Repositories
         IQueryable<RecipeEntity> GetRecipes();
         IQueryable<RecipeEntity> GetRecipesByStyleSlug(string styleSlug);
         IQueryable<RecipeEntity> GetRecipesInLibrary(int userId);
+        void RemoveRecipeFromLibrary(int recipeId, int userId);
         void Save(RecipeEntity recipeEntity);
     }
 }

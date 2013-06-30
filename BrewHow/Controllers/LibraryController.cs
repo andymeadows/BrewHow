@@ -11,6 +11,7 @@ using WebMatrix.WebData;
 
 namespace BrewHow.Controllers
 {
+    [Authorize]
     public class LibraryController : Controller
     {
         private readonly IRecipeRepository _recipeRepository;
@@ -43,11 +44,25 @@ namespace BrewHow.Controllers
         [HttpPost]
         public ActionResult Create(int id)
         {
-            this._recipeRepository.AddRecipeToLibrary(
-                id, WebSecurity.CurrentUserId);
+            int userId = WebSecurity.CurrentUserId;
+
+            this
+                ._recipeRepository
+                .AddRecipeToLibrary(id, userId);
+
+            return Json(new { result = "ok" } );
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            int userId = WebSecurity.CurrentUserId;
+
+            this
+                ._recipeRepository
+                .RemoveRecipeFromLibrary(id, userId);
 
             return Json(new { result = "ok" });
         }
-
     }
 }

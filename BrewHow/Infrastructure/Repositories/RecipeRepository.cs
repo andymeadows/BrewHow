@@ -93,6 +93,30 @@ namespace BrewHow.Infrastructure.Repositories
                 .Select(AsRecipeEntity);
         }
 
+        public void RemoveRecipeFromLibrary(int recipeId, int userId)
+        {
+            var recipe = this
+                .Context
+                .Recipes
+                .FirstOrDefault(r => r.RecipeId == recipeId);
+
+            if (recipe == null)
+            {
+                return;
+            }
+
+            var user = this
+                .Context
+                .UserProfiles
+                .FirstOrDefault(u => u.UserId == userId);
+
+            // No null check on this.  We're calling it.  If we 
+            // call it w/o knowing who the user is, then shame on us.
+            user.Library.Remove(recipe);
+
+            this.Context.SaveChanges();
+        }
+
         /// <summary>
         /// Saves the state of a recipe to persistent
         /// storage.
@@ -119,6 +143,8 @@ namespace BrewHow.Infrastructure.Repositories
                     "Recipes require a contributor.");
             }
 
+            // Load the style assigned to the recipe.  We load this because
+            // it may change from whatthe current db model is.
             var existingStyleModel = new Style();
             AssignEntityToModel(recipeEntity.Style, existingStyleModel);
 
@@ -127,25 +153,28 @@ namespace BrewHow.Infrastructure.Repositories
                 .Styles
                 .Attach(existingStyleModel);
 
-            // Assumes the user already exists and the domain has validated
-            // this is the user that created the model
-            var existingUserModel = new UserProfile();
-            AssignEntityToModel(recipeEntity.Contributor, existingUserModel);
-
-            this
-                .Context
-                .UserProfiles
-                .Attach(existingUserModel);
-
+            // If it's a new recipe we have to do a decent bit of work.
             if (recipeEntity.RecipeId == 0)
             {
+                // Create the recipe.
                 var newRecipeModel = new Recipe();
+                // Add the recipe to the context for change tracking.
                 this.Context.Recipes.Add(newRecipeModel);
+
+
+                // Assumes the user already exists and the domain has validated
+                // this is the user that created the model
+                var existingUserModel = new UserProfile();
+                AssignEntityToModel(recipeEntity.Contributor, existingUserModel);
+
+                this
+                    .Context
+                    .UserProfiles
+                    .Attach(existingUserModel);
 
                 // Assign the properties that can only be assigned on creation.
                 newRecipeModel.Style = existingStyleModel;
                 newRecipeModel.Slug = recipeEntity.Slug;
-
                 newRecipeModel.Contributor = existingUserModel;
 
                 AssignEntityToModel(recipeEntity, newRecipeModel);
@@ -157,6 +186,8 @@ namespace BrewHow.Infrastructure.Repositories
             var recipeModel = this
                 .Context
                 .Recipes
+                .Include("Style")
+                .Include("Contributor")
                 .FirstOrDefault(r => r.RecipeId == recipeEntity.RecipeId);
 
             if (recipeModel == null)

@@ -25,6 +25,11 @@
         <th>
             @Html.DisplayNameFor(model => model[0].FinalGravity)
         </th>
+@if(Request.IsAuthenticated) {
+        <th>
+
+        </th>
+}
     </tr>
 
 @foreach (var item in Model) {
@@ -41,9 +46,28 @@
         <td>
             @Html.DisplayFor(modelItem => item.FinalGravity)
         </td>
+@if (Request.IsAuthenticated) {
+        <td>
+            @Html.ActionLink("Add to Library", "Create", "Library", new { id = item.RecipeId }, new { @class = "add-recipe", data_id = @item.RecipeId })
+        </td>
+}
     </tr>
 }
 
 </table>
 
 @{ Html.RenderPartial("PagingPartial", Model); }    
+
+@section scripts {
+<script type="text/javascript">
+    $(".add-recipe").click(function(event) {
+        event.preventDefault();
+        $link = $(this);
+        $.post($link.attr("href"), "", function (response) {
+            if (response.result == "ok") {
+                $link.replaceWith("<span>Recipe Added</span>");
+            }
+        });
+    });
+</script>
+}
