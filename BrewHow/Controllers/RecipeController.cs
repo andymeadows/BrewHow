@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-
 using BrewHow.Domain.Entities;
 using BrewHow.Domain.Repositories;
 using BrewHow.Models;
@@ -40,28 +40,38 @@ namespace BrewHow.Controllers
 
         // Respond to requests to ~/ with the list of
         // recipes in the system.
-        public ActionResult Index(int page = 0)
+        public async Task<ActionResult> Index(int page = 0)
         {
-            var recipes = _recipeRepository.GetRecipes();
+            var recipeListTask = Task.Factory.StartNew(() =>
+            {
+                var recipes = _recipeRepository.GetRecipes();
 
-            var viewModel = new PagedResult<RecipeEntity, RecipeDisplayViewModel>(
-                recipes,
-                page,
-                this._displayViewModelMapper.EntityToViewModel);
+                var viewModel = new PagedResult<RecipeEntity, RecipeDisplayViewModel>(
+                    recipes,
+                    page,
+                    this._displayViewModelMapper.EntityToViewModel);
 
-            return View(viewModel);
+                return viewModel;
+            });
+
+            return View(await recipeListTask);
         }
 
         // Retrieve all of the recipes of a certain style.
-        public ActionResult Style(string style, int page = 0)
+        public async Task<ActionResult> Style(string style, int page = 0)
         {
-            var recipesForStyle = 
-                _recipeRepository.GetRecipesByStyleSlug(style);
+            var recipeListTask = Task.Factory.StartNew(() =>
+            {
+                var recipesForStyle =
+                    _recipeRepository.GetRecipesByStyleSlug(style);
 
-            var viewModel = new PagedResult<RecipeEntity, RecipeDisplayViewModel>(
-                recipesForStyle,
-                page,
-                this._displayViewModelMapper.EntityToViewModel);
+                var viewModel = new PagedResult<RecipeEntity, RecipeDisplayViewModel>(
+                    recipesForStyle,
+                    page,
+                    this._displayViewModelMapper.EntityToViewModel);
+
+                return viewModel;
+            });
 
             var styleEntity = _styleRepository.GetStyleBySlug(style);
 
@@ -70,7 +80,7 @@ namespace BrewHow.Controllers
                 ViewBag.Title = styleEntity.Name + " Recipes";
             }
 
-            return View("Index", viewModel);
+            return View("Index", await recipeListTask);
         }
 
         // Retrieve the details of a recipe from the
@@ -78,10 +88,10 @@ namespace BrewHow.Controllers
         // view used to display them to the user.
         public ActionResult Details(int id)
         {
-            var recipe = 
+            var recipe =
                 this._recipeRepository.GetRecipe(id);
 
-            var viewModel = 
+            var viewModel =
                 this._displayViewModelMapper.EntityToViewModel(recipe);
 
             return View(viewModel);

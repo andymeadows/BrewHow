@@ -8,6 +8,7 @@ using BrewHow.Domain.Entities;
 using BrewHow.Domain.Repositories;
 using BrewHow.ViewModels;
 using BrewHow.Models;
+using System.Threading.Tasks;
 
 namespace BrewHow.Controllers
 {
@@ -20,14 +21,19 @@ namespace BrewHow.Controllers
             this._styleRepository = styleRepository;
         }
 
-        public ActionResult Index(int page = 0)
+        public async Task<ActionResult> Index(int page = 0)
         {
-            var model = new PagedResult<StyleEntity, StyleDisplayViewModel>(
-                _styleRepository.GetStyles(),
-                page,
-                ToDisplayModel);
+            var styleList = Task.Factory.StartNew(() =>
+            {
+                var viewModel = new PagedResult<StyleEntity, StyleDisplayViewModel>(
+                    _styleRepository.GetStyles(),
+                    page,
+                    ToDisplayModel);
 
-            return View(model);
+                return viewModel;
+            });
+
+            return View(await styleList);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using BrewHow.Domain.Entities;
 using BrewHow.Domain.Repositories;
@@ -24,18 +25,27 @@ namespace BrewHow.Controllers
             this._displayModelMapper = displayModelMapper;
         }
 
-        public ActionResult Index(int page = 0)
+        public async Task<ActionResult> Index(int page = 0)
         {
-            var recipesInLibrary = this
-                ._libraryRepository
-                .GetRecipesInLibrary(WebSecurity.CurrentUserId);
+            var context = System.Web.HttpContext.Current;
 
-            var viewModel = new PagedResult<RecipeEntity, RecipeDisplayViewModel>(
-                recipesInLibrary,
-                page,
-                this._displayModelMapper.EntityToViewModel);
+            var recipeListTask = Task.Factory.StartNew(() =>
+            {
+                System.Web.HttpContext.Current = context;
 
-            return View(viewModel);
+                var recipesInLibrary = this
+                    ._libraryRepository
+                    .GetRecipesInLibrary(WebSecurity.CurrentUserId);
+
+                var viewModel = new PagedResult<RecipeEntity, RecipeDisplayViewModel>(
+                    recipesInLibrary,
+                    page,
+                    this._displayModelMapper.EntityToViewModel);
+
+                return viewModel;
+            });
+
+            return View(await recipeListTask);
         }
 
         [HttpPost]
