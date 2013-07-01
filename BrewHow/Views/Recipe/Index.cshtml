@@ -58,16 +58,22 @@
 
 @{ Html.RenderPartial("PagingPartial", Model); }    
 
+@Html.AntiForgeryToken()
+
 @section scripts {
 <script type="text/javascript">
     $(".add-recipe").click(function(event) {
         event.preventDefault();
         $link = $(this);
-        $.post($link.attr("href"), "", function (response) {
-            if (response.result == "ok") {
-                $link.replaceWith("<span>Recipe Added</span>");
+        alert($link);
+        $.post($link.attr("href"),
+            { __RequestVerificationToken: $("input[name=__RequestVerificationToken]").val() },
+            function (response) {
+                if (response.result == "ok") {
+                    $link.replaceWith("<span>Recipe Added</span>");
+                }
             }
-        });
+        )
     });
 </script>
 }

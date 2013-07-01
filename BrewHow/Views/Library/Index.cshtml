@@ -20,11 +20,8 @@
         <th>
             @Html.DisplayNameFor(model => model[0].FinalGravity)
         </th>
-@if(Request.IsAuthenticated) {
         <th>
-
         </th>
-}
     </tr>
 
 @foreach (var item in Model) {
@@ -41,28 +38,30 @@
         <td>
             @Html.DisplayFor(modelItem => item.FinalGravity)
         </td>
-@if (Request.IsAuthenticated) {
         <td>
             @Html.ActionLink("Remove from Library", "Delete", "Library", new { id = item.RecipeId }, new { @class = "remove-recipe", data_id = @item.RecipeId })
         </td>
-}
     </tr>
 }
 
 </table>
 
 @{ Html.RenderPartial("PagingPartial", Model); }    
+@Html.AntiForgeryToken()
 
 @section scripts {
 <script type="text/javascript">
     $(".remove-recipe").click(function(event) {
         event.preventDefault();
         $link = $(this);
-        $.post($link.attr('href'), "", function (response) {
-            if (response.result == "ok") {
-                $link.closest('tr').remove();
+        $.post($link.attr('href'),
+            { __RequestVerificationToken: $("input[name=__RequestVerificationToken]").val() },
+            function (response) {
+                if (response.result == "ok") {
+                    $link.closest('tr').remove();
+                }
             }
-        });
+        );
     });
 </script>
 }

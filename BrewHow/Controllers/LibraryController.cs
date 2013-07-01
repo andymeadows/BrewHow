@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using BrewHow.Domain.Entities;
 using BrewHow.Domain.Repositories;
@@ -14,15 +11,15 @@ namespace BrewHow.Controllers
     [Authorize]
     public class LibraryController : Controller
     {
-        private readonly IRecipeRepository _recipeRepository;
+        private readonly ILibraryRepository _libraryRepository;
         private readonly IUserProfileEntityFactory _userProfileEntityFactory;
         private readonly IRecipeDisplayViewModelMapper _displayModelMapper;
 
-        public LibraryController(IRecipeRepository recipeRepository,
+        public LibraryController(ILibraryRepository libraryRepository,
             IUserProfileEntityFactory userProfileEntityFactory,
             IRecipeDisplayViewModelMapper displayModelMapper)
         {
-            this._recipeRepository = recipeRepository;
+            this._libraryRepository = libraryRepository;
             this._userProfileEntityFactory = userProfileEntityFactory;
             this._displayModelMapper = displayModelMapper;
         }
@@ -30,7 +27,7 @@ namespace BrewHow.Controllers
         public ActionResult Index(int page = 0)
         {
             var recipesInLibrary = this
-                ._recipeRepository
+                ._libraryRepository
                 .GetRecipesInLibrary(WebSecurity.CurrentUserId);
 
             var viewModel = new PagedResult<RecipeEntity, RecipeDisplayViewModel>(
@@ -42,24 +39,26 @@ namespace BrewHow.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(int id)
         {
             int userId = WebSecurity.CurrentUserId;
 
             this
-                ._recipeRepository
+                ._libraryRepository
                 .AddRecipeToLibrary(id, userId);
 
             return Json(new { result = "ok" } );
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
             int userId = WebSecurity.CurrentUserId;
 
             this
-                ._recipeRepository
+                ._libraryRepository
                 .RemoveRecipeFromLibrary(id, userId);
 
             return Json(new { result = "ok" });

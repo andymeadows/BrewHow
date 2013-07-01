@@ -16,30 +16,6 @@ namespace BrewHow.Infrastructure.Repositories
         {
         }
 
-        public void AddRecipeToLibrary(int recipeId, int userId)
-        {
-            var recipe = this
-                .Context
-                .Recipes
-                .FirstOrDefault(r => r.RecipeId == recipeId);
-
-            if (recipe == null)
-            {
-                return;
-            }
-
-            var user = this
-                .Context
-                .UserProfiles
-                .FirstOrDefault(u => u.UserId == userId);
-
-            // No null check on this.  We're calling it.  If we 
-            // call it w/o knowing who the user is, then shame on us.
-            user.Library.Add(recipe);
-
-            this.Context.SaveChanges();
-        }
-
         /// <summary>
         /// Retrieve all recipes from the repository
         /// </summary>
@@ -74,47 +50,6 @@ namespace BrewHow.Infrastructure.Repositories
             return this
                 .RecipeEntities
                 .Where(r => r.Style.Slug == styleSlug);
-        }
-
-        /// <summary>
-        /// Retrieves all of the recipes within a user's library.
-        /// </summary>
-        /// <param name="userId">The id of the user owning the library</param>
-        /// <returns></returns>
-        public IQueryable<RecipeEntity> GetRecipesInLibrary(int userId)
-        {
-            return this
-                .Context
-                .UserProfiles
-                .Include("Library")
-                .Where(u => u.UserId == userId)
-                .SelectMany(u => u.Library)
-                .OrderBy(r => r.Name)
-                .Select(AsRecipeEntity);
-        }
-
-        public void RemoveRecipeFromLibrary(int recipeId, int userId)
-        {
-            var recipe = this
-                .Context
-                .Recipes
-                .FirstOrDefault(r => r.RecipeId == recipeId);
-
-            if (recipe == null)
-            {
-                return;
-            }
-
-            var user = this
-                .Context
-                .UserProfiles
-                .FirstOrDefault(u => u.UserId == userId);
-
-            // No null check on this.  We're calling it.  If we 
-            // call it w/o knowing who the user is, then shame on us.
-            user.Library.Remove(recipe);
-
-            this.Context.SaveChanges();
         }
 
         /// <summary>
@@ -222,37 +157,9 @@ namespace BrewHow.Infrastructure.Repositories
                     .Include("Style")
                     .Include("Contributor")
                     .OrderBy(r => r.Name)
-                    .Select(AsRecipeEntity); 
+                    .Select(EntityMappingExpressions.AsRecipeEntity); 
             }
         }
-
-        /// <summary>
-        /// Expression to convert a Recipe model to a 
-        /// RecipeEntity domain model.
-        /// </summary>
-        private static readonly Expression<Func<Recipe, RecipeEntity>> AsRecipeEntity =
-            r => new RecipeEntity
-            {
-                RecipeId = r.RecipeId,
-                Name = r.Name,
-                OriginalGravity = r.OriginalGravity,
-                FinalGravity = r.FinalGravity,
-                GrainBill = r.GrainBill,
-                Instructions = r.Instructions,
-                Slug = r.Slug,
-                Contributor = new UserProfileEntity
-                {
-                    UserId = r.Contributor.UserId,
-                    UserName = r.Contributor.UserName
-                },
-                Style = new StyleEntity 
-                { 
-                    Name = r.Style.Name, 
-                    StyleId = r.Style.StyleId, 
-                    Category = (CategoryEntity)r.Style.Category,
-                    Slug = r.Style.Slug
-                }
-            };
 
         /// <summary>
         /// Assigns the values of a Recipe entity's 

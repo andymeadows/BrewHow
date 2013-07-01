@@ -184,11 +184,14 @@
     <Compile Include="Domain\Entities\StyleEntity.cs" />
     <Compile Include="Domain\Entities\UserProfileEntity.cs" />
     <Compile Include="Domain\Entities\IUserProfileEntityFactory.cs" />
+    <Compile Include="Domain\Repositories\ILibraryRepository.cs" />
     <Compile Include="Infrastructure\Entities\UserProfileEntityFactory.cs" />
     <Compile Include="Domain\Repositories\IRecipeRepository.cs" />
     <Compile Include="Domain\Repositories\IReviewRepository.cs" />
     <Compile Include="Domain\Repositories\IStyleRepository.cs" />
     <Compile Include="Domain\Repositories\IUserProfileRepository.cs" />
+    <Compile Include="Infrastructure\Repositories\LibraryRepository.cs" />
+    <Compile Include="Infrastructure\Repositories\EntityMappingExpressions.cs" />
     <Compile Include="Infrastructure\Repositories\RepositoryBase.cs" />
     <Compile Include="Infrastructure\Repositories\StyleRepository.cs" />
     <Compile Include="Global.asax.cs">

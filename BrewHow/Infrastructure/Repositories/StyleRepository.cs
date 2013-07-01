@@ -41,17 +41,8 @@ namespace BrewHow.Infrastructure.Repositories
                     .Context
                     .Styles
                     .OrderBy(s => s.Name)
-                    .Select(AsStyleEntity);
+                    .Select(EntityMappingExpressions.AsStyleEntity);
             }
         }
-
-        private static readonly Expression<Func<Style, StyleEntity>> AsStyleEntity =
-            s => new StyleEntity
-            {
-                StyleId = s.StyleId,
-                Name = s.Name,
-                Category = (CategoryEntity) s.Category,
-                Slug = s.Slug
-            };
     }
 }

@@ -63,16 +63,9 @@ namespace BrewHow.Infrastructure.Repositories
                 return this
                     .Context
                     .UserProfiles
-                    .Select(AsUserProfileEntity); 
+                    .Select(EntityMappingExpressions.AsUserProfileEntity); 
             }
         }
-
-        private static readonly Expression<Func<UserProfile, UserProfileEntity>> AsUserProfileEntity =
-            u => new UserProfileEntity
-            {
-                UserId = u.UserId,
-                UserName = u.UserName
-            };
 
         private UserProfile AssignEntityToModel(UserProfileEntity userProfileEntity)
         {
