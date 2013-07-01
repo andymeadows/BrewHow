@@ -11,7 +11,7 @@
     @Html.ActionLink("Create New", "Create")
 }
 </p>
-<table>
+<table id ="recipe-list">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model[0].Name)
@@ -62,18 +62,59 @@
 
 @section scripts {
 <script type="text/javascript">
-    $(".add-recipe").click(function(event) {
-        event.preventDefault();
-        $link = $(this);
-        alert($link);
-        $.post($link.attr("href"),
-            { __RequestVerificationToken: $("input[name=__RequestVerificationToken]").val() },
-            function (response) {
-                if (response.result == "ok") {
-                    $link.replaceWith("<span>Recipe Added</span>");
+    $(function () {
+        $.connection.hub.start();
+
+        var recipeHub = $.connection.recipeHub;
+        recipeHub.client.recipeAdded = function (recipe) {
+            var tr = $("#recipe-list").find('tbody')
+                .append(
+                    $('<tr>').css('background-color', '#ff0')
+                        .append($('<td>')
+                            .append($('<a>')
+                            .attr('href', '/Recipe/Details/'
+                                + recipe.RecipeId
+                                + "/" + recipe.Slug)
+                            .text(recipe.Name))
+                        )
+                        .append($('<td>')
+                            .append($('<a>')
+                            .attr('href', '/Recipe/'
+                                +recipe.StyleSlug)
+                            .text(recipe.Style))
+                        )
+                        .append($('<td>'
+                            + recipe
+                                .OriginalGravity
+                                .toFixed(3)
+                            + '</td>'))
+                        .append($('<td>'
+                            + recipe
+                                .FinalGravity
+                                .toFixed(3)
+                            + '</td>'))
+@if (Request.IsAuthenticated) {
+@:                        .append($('<td>'
+@:                            + 'Add to Library'
+@:                            + '</td>'))
+}
+                );
+        }
+
+        $(".add-recipe").click(function(event) {
+            event.preventDefault();
+            $link = $(this);
+            alert($link);
+            $.post($link.attr("href"),
+                { __RequestVerificationToken: $("input[name=__RequestVerificationToken]").val() },
+                function (response) {
+                    if (response.result == "ok") {
+                        $link.replaceWith("<span>Recipe Added</span>");
+                    }
                 }
-            }
-        )
+            )
+        });
     });
 </script>
+
 }

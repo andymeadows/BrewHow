@@ -48,12 +48,17 @@ namespace BrewHow.Infrastructure.Repositories
                 return;
             }
 
+            var userProfile =
+                AssignEntityToModel(userProfileEntity);
+
             this
                 .Context
                 .UserProfiles
-                .Add(AssignEntityToModel(userProfileEntity));
+                .Add(userProfile);
 
             this.Context.SaveChanges();
+
+            userProfileEntity.UserId = userProfile.UserId;
         }
 
         private IQueryable<UserProfileEntity> UserProfileEntities

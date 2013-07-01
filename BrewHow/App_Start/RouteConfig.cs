@@ -13,6 +13,8 @@ namespace BrewHow
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapHubs();
+
             routes.MapRoute(
    	            name: "BeerByStyle",
                 url: "Recipe/{style}",

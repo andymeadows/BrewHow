@@ -111,10 +111,11 @@ namespace BrewHow.Infrastructure.Repositories
                 newRecipeModel.Style = existingStyleModel;
                 newRecipeModel.Slug = recipeEntity.Slug;
                 newRecipeModel.Contributor = existingUserModel;
-
                 AssignEntityToModel(recipeEntity, newRecipeModel);
-
                 this.Context.SaveChanges();
+
+                recipeEntity.RecipeId = newRecipeModel.RecipeId;
+
                 return;
             }
 

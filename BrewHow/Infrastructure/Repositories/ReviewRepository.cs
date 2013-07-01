@@ -64,10 +64,11 @@ namespace BrewHow.Infrastructure.Repositories
                     .Attach(userProfile);
 
                 modelReview.Reviewer = userProfile;
-
                 recipe.Reviews.Add(modelReview);
-
                 Context.SaveChanges();
+
+                review.ReviewId = modelReview.ReviewId;
+
                 return;
             }
 

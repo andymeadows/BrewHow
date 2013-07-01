@@ -130,6 +130,18 @@ namespace BrewHow.Controllers
 
                     this._recipeRepository.Save(recipeEntity);
 
+                    var context = Microsoft.AspNet.SignalR.
+                        GlobalHost
+                            .ConnectionManager
+                            .GetHubContext<RecipeHub>();
+                    context
+                        .Clients
+                        .All
+                        .recipeAdded(
+                            _displayViewModelMapper
+                                .EntityToViewModel(recipeEntity)
+                        );
+
                     return RedirectToAction("Index");
                 }
             }
