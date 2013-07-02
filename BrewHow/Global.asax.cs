@@ -25,6 +25,8 @@ namespace BrewHow
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+
+            DisplayModeConfig.RegisterDisplayModes();
         }
 
         protected void Application_EndRequest()

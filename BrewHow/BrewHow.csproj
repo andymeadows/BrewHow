@@ -178,6 +178,7 @@
   <ItemGroup>
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\DisplayModeConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\MefDependencyResolver.cs" />
     <Compile Include="App_Start\RecipeStyleConstraint.cs" />
@@ -378,6 +379,11 @@
     <Content Include="Views\Shared\PagingPartial.cshtml" />
     <Content Include="Views\Style\Index.cshtml" />
     <Content Include="Views\Library\Index.cshtml" />
+    <Content Include="Views\Shared\_Layout.Mobile.cshtml" />
+    <Content Include="Views\Recipe\Index.Mobile.cshtml" />
+    <Content Include="Views\Recipe\Details.Mobile.cshtml" />
+    <Content Include="Views\Library\Index.Mobile.cshtml" />
+    <Content Include="Views\Shared\_Layout.Nexus7.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
