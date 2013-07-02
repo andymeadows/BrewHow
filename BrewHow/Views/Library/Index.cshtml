@@ -15,9 +15,12 @@
             @Html.DisplayNameFor(model => model[0].Style)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model[0].PercentAlcoholByVolume)
+        </th>
+        <th class="hide600">
             @Html.DisplayNameFor(model => model[0].OriginalGravity)
         </th>
-        <th>
+        <th class="hide600">
             @Html.DisplayNameFor(model => model[0].FinalGravity)
         </th>
         <th>
@@ -33,9 +36,12 @@
             @Html.ActionLink(Html.DisplayFor(modelItem => item.Style).ToHtmlString(), "Style", "Recipe", new { style = item.StyleSlug }, null)
         </td>
         <td>
+            @Html.DisplayFor(modelItem => item.PercentAlcoholByVolume)
+        </td>
+        <td class="hide600">
             @Html.DisplayFor(modelItem => item.OriginalGravity)
         </td>
-        <td>
+        <td class="hide600">
             @Html.DisplayFor(modelItem => item.FinalGravity)
         </td>
         <td>

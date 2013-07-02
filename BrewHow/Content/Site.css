@@ -587,6 +587,11 @@ tr.pager td {
 }
 
 
+@media only screen and (max-width: 600px) {
+    .hide600 {
+        display: none;
+    }
+}
 /********************
 *   Mobile Styles   *
 ********************/
