@@ -20,15 +20,26 @@ namespace BrewHow.Areas.Review.Controllers
             this._userProfileEntityFactory = userProfileEntityFactory;
         }
 
-        public ActionResult Index(int id)
+        public ActionResult Index(int id, string name)
         {
             var reviews = this
                 ._reviewRepository
                 .GetReviewsForRecipe(id);
 
             this.ViewBag.RecipeId = id;
+            this.ViewBag.RecipeName = name;
 
-            return PartialView(reviews.AsEnumerable().Select(s => ToListModel(s)));
+            var reviewList = 
+                reviews
+                .AsEnumerable()
+                .Select(s => ToListModel(s));
+
+            if (Request.Browser.IsMobileDevice)
+            {
+                return View(reviewList);
+            }
+
+            return PartialView(reviewList);
         }
 
         [Authorize]

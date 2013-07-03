@@ -114,7 +114,6 @@
         $(".add-recipe").click(function(event) {
             event.preventDefault();
             $link = $(this);
-            alert($link);
             $.post($link.attr("href"),
                 { __RequestVerificationToken: $("input[name=__RequestVerificationToken]").val() },
                 function (response) {
